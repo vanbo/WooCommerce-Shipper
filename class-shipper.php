@@ -383,6 +383,36 @@ class HypnoticShipper extends WC_Shipping_Method{
             $this->sanitized_fields = $sanitized_fields;
         }
     }
+
+    /**
+     * Admin Panel Options Processing
+     * - Saves the options to the DB
+     *
+     * @since 1.0.0
+     * @access public
+     * @return bool
+     */
+    public function process_admin_options() {
+        // Validate custom boxes and add to sanitized_fields
+        $custom_box_fields = array();
+        $this->validate_settings_fields($this->custom_box_fields, $custom_box_fields);
+
+        // Validate normal setting fields
+        $this->validate_settings_fields();
+
+        if ( !empty($custom_box_fields) )
+            array_merge($this->sanitized_fields, array('custom_boxes' => $custom_box_fields));
+
+        if ( count( $this->errors ) > 0 ) {
+            $this->display_errors();
+            return false;
+        } else {
+            update_option( $this->plugin_id . $this->id . '_settings', $this->sanitized_fields );
+            return true;
+        }
+    }
+
+    /**
      * Admin Panel Options
      */
     public function admin_options() {
