@@ -261,7 +261,7 @@ class HypnoticShipper extends WC_Shipping_Method{
         );
 
         if ( empty($this->letter_shipping_methods) ) {
-            unset($this->form_fields['letter_shipping_methods']);
+            unset($this->form_fields['letter_methods']);
         }
 
     }
