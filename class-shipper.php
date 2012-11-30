@@ -162,7 +162,7 @@ class HypnoticShipper extends WC_Shipping_Method{
             'max_unit'  => array(
                 'title' => __('Max units can hold', 'hypnoticshipper'),
                 'type' => 'text',
-                'description' => __('The maxiumum number', 'hypnoticshipper'),
+                'description' => __('The maxiumum number of items can be put into the box.', 'hypnoticshipper'),
                 'css' => 'width: 5em;'
             ),
             'target_methods' => array(
