@@ -350,6 +350,39 @@ class HypnoticShipper extends WC_Shipping_Method{
     }
 
     /**
+     * Validate Settings Field Data.
+     *
+     * Validate the data on the "Settings" form.
+     *
+     * @since 1.0.0
+     * @uses method_exists()
+     * @param bool $form_fields (default: false)
+     * @return void
+     */
+    public function validate_settings_fields( $form_fields = false, &$other_sanitized_fields = none ) {
+
+        if ( ! $form_fields )
+            $form_fields = $this->form_fields;
+
+        $sanitized_fields = array();
+
+        foreach ( $form_fields as $k => $v ) {
+            if ( ! isset( $v['type'] ) || ( $v['type'] == '' ) ) { $v['type'] == 'text'; } // Default to "text" field type.
+
+            if ( method_exists( $this, 'validate_' . $v['type'] . '_field' ) ) {
+                $field = $this->{'validate_' . $v['type'] . '_field'}( $k );
+                $sanitized_fields[$k] = $field;
+            } else {
+                $sanitized_fields[$k] = $this->settings[$k];
+            }
+        }
+
+        if ( $other_sanitized_fields != none ) {
+            $other_sanitized_fields = $sanitized_fields;
+        } else {
+            $this->sanitized_fields = $sanitized_fields;
+        }
+    }
      * Admin Panel Options
      */
     public function admin_options() {
