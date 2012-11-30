@@ -395,7 +395,7 @@ class HypnoticShipper extends WC_Shipping_Method{
     public function process_admin_options() {
         // Validate custom boxes and add to sanitized_fields
         $custom_box_fields = array();
-        $this->validate_settings_fields($this->custom_box_fields, $custom_box_fields);
+        $this->validate_settings_fields($this->box_form_fields, $custom_box_fields);
 
         // Validate normal setting fields
         $this->validate_settings_fields();
