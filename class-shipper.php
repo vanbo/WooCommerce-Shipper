@@ -345,7 +345,7 @@ class HypnoticShipper extends WC_Shipping_Method{
     /**
     * Prepare packages, split or not
     */
-    function prepare_packages(){
+    public function prepare_packages(){
 
     }
 
