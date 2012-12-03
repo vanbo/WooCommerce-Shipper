@@ -205,7 +205,8 @@ class HypnoticShipper extends WC_Shipping_Method{
             'debug' => array(
                 'title' => __('Debug mode', 'hypnoticzoo'),
                 'type' => 'checkbox',
-                'label' => __('Enable debug mode', 'hypnoticzoo'),
+                'label' => __('Enable Debug Mode', 'hypnoticzoo'),
+                'description' => __('This will output some debug information on your cart page, remember to turn this off when you done testing.', 'hypnoticzoo'),
                 'default' => 'no'
             ),
             'title' => array(
