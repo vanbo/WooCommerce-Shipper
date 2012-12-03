@@ -430,8 +430,8 @@ class HypnoticShipper extends WC_Shipping_Method{
         ?>
         <style>
             table.form-table { clear: none; float: left; }
-            table.wide { width: 650px; }
-            table.narrow { width: 500px; border: thin solid #DFDFDF; }
+            table.wide { width: 650px; border-right: thin solid #DFDFDF; margin-right: 15px !important; }
+            table.narrow { width: 500px; }
             
         </style>
         <h3><?php _e($this->carrier, 'hypnoticzoo'); ?></h3>
@@ -445,12 +445,53 @@ class HypnoticShipper extends WC_Shipping_Method{
 
         </table><!--/.form-table-->
 
+        <h4><?php _e('Container Settings', 'hypnoticzoo'); ?></h4>
         <table class="form-table narrow">
 
-            <?php
-            // Generate the HTML for boxes settings
-            $this->generate_box_settings_html();
-            ?>
+            <tbody>
+                <input type="hidden" placeholder="" value="" style="" id="woocommerce_<?php echo $this->id; ?>_box_id" name="woocommerce_<?php echo $this->id; ?>_box_label" class="input-text regular-input ">
+
+                <tr valign="top">
+                    <th class="titledesc" scope="row"><label for="woocommerce_<?php echo $this->id; ?>_box_label">Label</label></th>
+                    <td class="forminp">
+                    <fieldset>
+                        <legend class="screen-reader-text"><span>Label</span></legend>
+                        <input type="text" placeholder="" value="" style="" id="woocommerce_<?php echo $this->id; ?>_box_label" name="woocommerce_<?php echo $this->id; ?>_box_label" class="input-text regular-input "> <p class="description">Label your box for easier management.</p>
+                    </fieldset>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th class="titledesc" scope="row"><label for="woocommerce_<?php echo $this->id; ?>_box_width">Dimensions</label></th>
+                    <td class="forminp">
+                        <fieldset>
+                            <input type="text" placeholder="Width" value="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_width" name="woocommerce_<?php echo $this->id; ?>_box_width" class="input-text regular-input small">
+                            <input type="text" placeholder="Length" value="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_length" name="woocommerce_<?php echo $this->id; ?>_box_length" class="input-text regular-input small">
+                            <input type="text" placeholder="Height" value="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_height" name="woocommerce_<?php echo $this->id; ?>_box_height" class="input-text regular-input small">
+                            <input type="text" placeholder="Girth" value="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_girth" name="woocommerce_<?php echo $this->id; ?>_box_girth" class="input-text regular-input small">
+                            <span class="description">in Inch.</span>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th class="titledesc" scope="row"><label for="woocommerce_<?php echo $this->id; ?>_box_max_weight">Max weight can hold</label></th>
+                    <td class="forminp">
+                        <fieldset>
+                            <legend class="screen-reader-text"><span>Max weight can hold</span></legend>
+                            <input type="text" placeholder="" value="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_max_weight" name="woocommerce_<?php echo $this->id; ?>_box_max_weight" class="input-text regular-input small"> <span class="description">in LBS</span>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th class="titledesc" scope="row"><label for="woocommerce_<?php echo $this->id; ?>_box_max_unit">Max units can hold</label></th>
+                    <td class="forminp">
+                        <fieldset>
+                            <legend class="screen-reader-text"><span>Max units can hold</span></legend>
+                            <input type="text" placeholder="" value="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_max_unit" name="woocommerce_<?php echo $this->id; ?>_box_max_unit" class="input-text regular-input small"> <p class="description">The maxiumum number of items can be put into the box.</p>
+                        </fieldset>
+                    </td>
+                </tr>
+
+        </tbody>
 
         </table><!--/.form-table-->
         <div class="clear"></div>
@@ -458,24 +499,6 @@ class HypnoticShipper extends WC_Shipping_Method{
     }
 
     /************** Help functions *****************/
-
-    function generate_box_settings_html( $form_fields = false ) {
-        $short_fields = array('width', 'height', 'length', 'max_weight', 'max_unit');
-
-        if ( ! $form_fields )
-            $form_fields = $this->box_form_fields;
-
-        $html = '';
-        foreach ( $form_fields as $k => $v ) {
-            if ( ! isset( $v['type'] ) || ( $v['type'] == '' ) ) { $v['type'] == 'text'; } // Default to "text" field type.
-
-            if ( method_exists( $this, 'generate_' . $v['type'] . '_html' ) ) {
-                $html .= $this->{'generate_' . $v['type'] . '_html'}( $k, $v );
-            }
-        }
-
-        echo $html;
-    }
 
     /**
      * Use WooCommerce logger if debug is enabled.
