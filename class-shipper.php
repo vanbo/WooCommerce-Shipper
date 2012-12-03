@@ -268,6 +268,10 @@ class HypnoticShipper extends WC_Shipping_Method{
                 'default' => '',
                 'options' => $woocommerce->countries->countries
             ),
+            'available_boxes' => array(
+                'type' => 'hidden',
+                'default' => array()
+            ),
 
         );
 
@@ -411,13 +415,26 @@ class HypnoticShipper extends WC_Shipping_Method{
         // Validate normal setting fields
         $this->validate_settings_fields();
 
-        if ( !empty($custom_box_fields) )
-            array_merge($this->sanitized_fields, array('custom_boxes' => $custom_box_fields));
-
         if ( count( $this->errors ) > 0 ) {
             $this->display_errors();
             return false;
         } else {
+
+            // Manipulate fields before save
+            // Remove box settings to have it not saved as regular settings
+            $remove_fields = array_keys($this->box_form_fields);
+            foreach ( $this->sanitized_fields as $field => $value ) {
+                if ( in_array($field, $remove_fields) ) {
+                    unset( $this->sanitized_fields[$field] );
+                }
+            }
+
+            $this->sanitized_fields['available_boxes'] = $this->available_boxes;
+
+            if ( !$custom_box_fields['box_id'] )
+                $custom_box_fields['box_id'] = count($this->available_boxes) + 1;
+            $this->sanitized_fields['available_boxes'][$custom_box_fields['box_id']] = $custom_box_fields;
+
             update_option( $this->plugin_id . $this->id . '_settings', $this->sanitized_fields );
             return true;
         }
