@@ -51,6 +51,11 @@ class HypnoticShipper extends WC_Shipping_Method{
     /**
     * @var array
     */
+    var $carrier_boxes = array();
+
+    /**
+    * @var array
+    */
     var $allowed_origin_countries = array();
 
     /**
