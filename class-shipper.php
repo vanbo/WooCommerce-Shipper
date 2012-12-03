@@ -135,50 +135,56 @@ class HypnoticShipper extends WC_Shipping_Method{
     */
     function custombox_form_fields() {
         $this->box_form_fields = array(
-            'label' => array(
+            'box_id' => array(
+                'type' => 'hidden'
+            ),
+            'box_label' => array(
                 'title' => __('Label', 'hypnoticshipper'),
                 'type' => 'text',
                 'description' => __('Label your box for easier management.', 'hypnoticshipper'),
             ),
-            'width' => array(
+            'box_width' => array(
                 'title' => __('Width', 'hypnoticshipper'),
                 'type' => 'text',
                 'description' => __('in ' . strtoupper($this->dimension_unit), 'hypnoticshipper'),
-                'css' => 'width: 5em;'
+                'css' => 'width: 5em;',
+                'class' => 'small'
             ),
-            'length' => array(
+            'box_length' => array(
                 'title' => __('Length', 'hypnoticshipper'),
                 'type' => 'text',
                 'description' => __('in ' . strtoupper($this->dimension_unit), 'hypnoticshipper'),
-                'css' => 'width: 5em;'
+                'css' => 'width: 5em;',
+                'class' => 'small'
             ),
-            'height' => array(
+            'box_height' => array(
                 'title' => __('Height', 'hypnoticshipper'),
                 'type' => 'text',
                 'description' => __('in ' . strtoupper($this->dimension_unit), 'hypnoticshipper'),
-                'css' => 'width: 5em;'
+                'css' => 'width: 5em;',
+                'class' => 'small'
             ),
-            'max_weight'  => array(
+            'box_girth' => array(
+                'title' => __('Height', 'hypnoticshipper'),
+                'type' => 'text',
+                'description' => __('in ' . strtoupper($this->dimension_unit), 'hypnoticshipper'),
+                'css' => 'width: 5em;',
+                'class' => 'small'
+            ),
+            'box_max_weight'  => array(
                 'title' => __('Max weight can hold', 'hypnoticshipper'),
                 'type' => 'text',
                 'description' => __('in ' . strtoupper($this->weight_unit), 'hypnoticshipper'),
-                'css' => 'width: 5em;'
+                'css' => 'width: 5em;',
+                'class' => 'small'
             ),
-            'max_unit'  => array(
+            'box_max_unit'  => array(
                 'title' => __('Max units can hold', 'hypnoticshipper'),
                 'type' => 'text',
                 'description' => __('The maxiumum number of items can be put into the box.', 'hypnoticshipper'),
-                'css' => 'width: 5em;'
-            ),
-            'target_methods' => array(
-                'title' => __('Target Methods', 'hypnoticzoo'),
-                'type' => 'multiselect',
-                'class' => 'chosen_select',
-                'css' => 'width: 25em;',
-                'description' => 'Leave empty to allow used by all shipping methods',
-                'default' => '',
-                'options' => $this->shipping_methods
-            ),
+                'css' => 'width: 5em;',
+                'class' => 'small'
+            )
         );
     }
 
