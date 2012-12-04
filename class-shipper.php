@@ -201,6 +201,9 @@ class HypnoticShipper extends WC_Shipping_Method{
                 'description' => __('The maxiumum number of items can be put into the box.', 'hypnoticshipper'),
                 'css' => 'width: 5em;',
                 'class' => 'small'
+            ),
+            'box_remove' => array(
+                'type' => 'checkbox'
             )
         );
     }
