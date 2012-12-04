@@ -251,7 +251,7 @@ class HypnoticShipper extends WC_Shipping_Method{
                 'title' => __('Apply handling fee to shipping rate.', 'hypnoticzoo'),
                 'type' => 'checkbox',
                 'description' => __('Instead of applying handling fee to product value, apply it to shipping rate.', 'hypnoticzoo'),
-                'default' => ''
+                'default' => 'no'
             ),
             'package_methods' => array(
                 'title' => __('Shipping Methods For Packages', 'hypnoticzoo'),
@@ -470,7 +470,6 @@ class HypnoticShipper extends WC_Shipping_Method{
             table.form-table { clear: none; float: left; }
             table.wide { width: 650px; border-right: thin solid #DFDFDF; margin-right: 15px !important; }
             table.narrow { width: 500px; }
-            
         </style>
         <h3><?php _e($this->carrier, 'hypnoticzoo'); ?></h3>
         <p><?php _e($this->description, 'hypnoticzoo'); ?></p>
@@ -486,15 +485,20 @@ class HypnoticShipper extends WC_Shipping_Method{
         <h4><?php _e('Container Settings', 'hypnoticzoo'); ?></h4>
         <table class="form-table narrow">
 
+            <?php
+            // Generate the HTML For the available box dropdown.
+            $this->generate_settings_html( $this->saved_boxes_field );
+            ?>
+
             <tbody>
-                <input type="hidden" placeholder="" value="" style="" id="woocommerce_<?php echo $this->id; ?>_box_id" name="woocommerce_<?php echo $this->id; ?>_box_label" class="input-text regular-input ">
+                <input type="hidden" placeholder="" id="woocommerce_<?php echo $this->id; ?>_box_id" name="woocommerce_<?php echo $this->id; ?>_box_label" class="input-text regular-input ">
 
                 <tr valign="top">
                     <th class="titledesc" scope="row"><label for="woocommerce_<?php echo $this->id; ?>_box_label">Label</label></th>
                     <td class="forminp">
                     <fieldset>
                         <legend class="screen-reader-text"><span>Label</span></legend>
-                        <input type="text" placeholder="" value="" style="" id="woocommerce_<?php echo $this->id; ?>_box_label" name="woocommerce_<?php echo $this->id; ?>_box_label" class="input-text regular-input "> <p class="description">Label your box for easier management.</p>
+                        <input type="text" placeholder="" id="woocommerce_<?php echo $this->id; ?>_box_label" name="woocommerce_<?php echo $this->id; ?>_box_label" class="input-text regular-input "> <p class="description">Label your box for easier management.</p>
                     </fieldset>
                     </td>
                 </tr>
@@ -502,10 +506,10 @@ class HypnoticShipper extends WC_Shipping_Method{
                     <th class="titledesc" scope="row"><label for="woocommerce_<?php echo $this->id; ?>_box_width">Dimensions</label></th>
                     <td class="forminp">
                         <fieldset>
-                            <input type="text" placeholder="Width" value="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_width" name="woocommerce_<?php echo $this->id; ?>_box_width" class="input-text regular-input small">
-                            <input type="text" placeholder="Length" value="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_length" name="woocommerce_<?php echo $this->id; ?>_box_length" class="input-text regular-input small">
-                            <input type="text" placeholder="Height" value="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_height" name="woocommerce_<?php echo $this->id; ?>_box_height" class="input-text regular-input small">
-                            <input type="text" placeholder="Girth" value="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_girth" name="woocommerce_<?php echo $this->id; ?>_box_girth" class="input-text regular-input small">
+                            <input type="text" placeholder="Width" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_width" name="woocommerce_<?php echo $this->id; ?>_box_width" class="input-text regular-input small">
+                            <input type="text" placeholder="Length" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_length" name="woocommerce_<?php echo $this->id; ?>_box_length" class="input-text regular-input small">
+                            <input type="text" placeholder="Height" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_height" name="woocommerce_<?php echo $this->id; ?>_box_height" class="input-text regular-input small">
+                            <input type="text" placeholder="Girth" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_girth" name="woocommerce_<?php echo $this->id; ?>_box_girth" class="input-text regular-input small">
                             <span class="description">in Inch.</span>
                         </fieldset>
                     </td>
@@ -515,7 +519,7 @@ class HypnoticShipper extends WC_Shipping_Method{
                     <td class="forminp">
                         <fieldset>
                             <legend class="screen-reader-text"><span>Max weight can hold</span></legend>
-                            <input type="text" placeholder="" value="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_max_weight" name="woocommerce_<?php echo $this->id; ?>_box_max_weight" class="input-text regular-input small"> <span class="description">in LBS</span>
+                            <input type="text" placeholder="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_max_weight" name="woocommerce_<?php echo $this->id; ?>_box_max_weight" class="input-text regular-input small"> <span class="description">in LBS</span>
                         </fieldset>
                     </td>
                 </tr>
