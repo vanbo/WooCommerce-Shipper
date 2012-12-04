@@ -541,5 +541,43 @@ class HypnoticShipper extends WC_Shipping_Method{
         }
     }
 
+    /**
+     * Generate Select HTML.
+     *
+     * @access public
+     * @param mixed $key
+     * @param mixed $data
+     * @since 1.0.0
+     * @return string
+     */
+    function generate_select_html ( $key, $data ) {
+        $html = '';
+
+        if ( isset( $data['title'] ) && $data['title'] != '' ) $title = $data['title']; else $title = '';
+        $data['options'] = (isset( $data['options'] )) ? (array) $data['options'] : array();
+        $data['class'] = (isset( $data['class'] )) ? $data['class'] : '';
+        $data['css'] = (isset( $data['css'] )) ? $data['css'] : '';
+
+        $html .= '<tr valign="top">' . "\n";
+            $html .= '<th scope="row" class="titledesc">';
+            $html .= '<label for="' . $this->plugin_id . $this->id . '_' . $key . '">' . $title . '</label>';
+            $html .= '</th>' . "\n";
+            $html .= '<td class="forminp">' . "\n";
+                $html .= '<fieldset><legend class="screen-reader-text"><span>' . $title . '</span></legend>' . "\n";
+                $html .= '<select name="' . $this->plugin_id . $this->id . '_' . $key . '" id="' . $this->plugin_id . $this->id . '_' . $key . '" style="'.$data['css'].'" class="select '.$data['class'].'">';
+
+                foreach ($data['options'] as $option_key => $option_value) :
+                    $html .= '<option value="'.$option_key.'" '.selected($option_key, esc_attr( isset($this->settings[$key]) ? $this->settings[$key] : '' ), false).'>'.$option_value.'</option>';
+                endforeach;
+
+                $html .= '</select>';
+                if ( isset( $data['description'] ) && $data['description'] != '' ) { $html .= ' <p class="description">' . $data['description'] . '</p>' . "\n"; }
+            $html .= '</fieldset>';
+            $html .= '</td>' . "\n";
+        $html .= '</tr>' . "\n";
+
+        return $html;
+    }
+
 }
 ?>
