@@ -134,6 +134,23 @@ class HypnoticShipper extends WC_Shipping_Method{
     * Fields for custom box
     */
     function custombox_form_fields() {
+
+        $available_boxes = array('0' => 'Add New Box');
+        foreach( $this->available_boxes as $key => $box ){
+            if ( $box['box_label'] ) {
+                $available_boxes[$key] = $box['box_label'];
+            } else {
+                $available_boxes[$key] = $box['box_width'] . ' x ' . $box['box_length'] . ' x ' . $box['box_height'] . ' in ' . strtoupper($this->dimension_unit);
+            }
+        }
+        $this->saved_boxes_field = array(
+            'saved_boxes' => array(
+                'title' => __('Available Boxes', 'hypnoticzoo'),
+                'type' => 'select',
+                'options' => $available_boxes
+            ),
+        );
+
         $this->box_form_fields = array(
             'box_id' => array(
                 'type' => 'hidden'
