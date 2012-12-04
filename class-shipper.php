@@ -521,7 +521,20 @@ class HypnoticShipper extends WC_Shipping_Method{
                     <td class="forminp">
                         <fieldset>
                             <legend class="screen-reader-text"><span>Max units can hold</span></legend>
-                            <input type="text" placeholder="" value="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_max_unit" name="woocommerce_<?php echo $this->id; ?>_box_max_unit" class="input-text regular-input small"> <p class="description">The maxiumum number of items can be put into the box.</p>
+                            <input type="text" placeholder="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_max_unit" name="woocommerce_<?php echo $this->id; ?>_box_max_unit" class="input-text regular-input small"> <p class="description">The maxiumum number of items can be put into the box.</p>
+                        </fieldset>
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <th class="titledesc" scope="row"></th>
+                    <td class="forminp">
+                        <fieldset>
+                            <input type="checkbox" class="" value="yes" id="woocommerce_<?php echo $this->id; ?>_box_remove" name="woocommerce_<?php echo $this->id; ?>_box_remove">
+
+                            <span class="description">Remove this box</span>
+
+                            <input type="submit" value="Save" class="button-primary" name="save">
                         </fieldset>
                     </td>
                 </tr>
