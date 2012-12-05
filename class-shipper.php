@@ -84,6 +84,7 @@ class HypnoticShipper extends WC_Shipping_Method{
         global $woocommerce;
 
         // Load the form fields.
+        $this->load_containers();
         $this->init_form_fields();
         $this->add_form_fields();
         $this->sort_form_fiels();
@@ -222,6 +223,13 @@ class HypnoticShipper extends WC_Shipping_Method{
     function init_form_fields() {
         global $woocommerce;
 
+        $usable_boxes = array();
+
+        if ( is_array($this->usable_boxes) ){
+            foreach ( $this->usable_boxes as $key => $box) {
+                $usable_boxes[$key] = $box['label'];
+            }
+        }
         $this->form_fields = array(
 
             'enabled' => array(
@@ -395,6 +403,25 @@ class HypnoticShipper extends WC_Shipping_Method{
     }
 
     /**
+    /**
+    * Load containers
+    */
+    public function load_containers() {
+        $available_boxes = array();
+
+        $form_field_settings = ( array ) get_option( $this->plugin_id . $this->id . '_settings' );
+        if ( isset($form_field_settings['available_boxes']) && !empty($form_field_settings['available_boxes']) ) {
+
+            $available_boxes = $form_field_settings['available_boxes'];
+
+            foreach ( $available_boxes as $key => $box ) {
+                if ( $box['box_label'] == '' ) $available_boxes[$key]['label'] = $box['box_width'] . ' x ' . $box['box_length'] . ' x ' . $box['box_height'] . ' in ' . strtoupper($this->dimension_unit);
+            }
+
+        }
+
+        $this->usable_boxes = array_merge($this->carrier_boxes, $available_boxes);
+    }
      * Validate Settings Field Data.
      *
      * Validate the data on the "Settings" form.
