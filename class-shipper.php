@@ -558,9 +558,10 @@ class HypnoticShipper extends WC_Shipping_Method{
     /**
      * Use WooCommerce logger if debug is enabled.
      */
-    function add_log( $message, $debug_on = true ) {
+    public function add_log( $message='test', $debug_on = true ) {
         global $woocommerce;
-        if ( $this->debug=='yes' || !$debug_on ) {
+
+        if ( $this->debug == 'yes' || !$debug_on ) {
             if ( !$this->log ) $this->log = $woocommerce->logger();
 
             $this->log->add( $file=$this->id, $message );
@@ -570,7 +571,7 @@ class HypnoticShipper extends WC_Shipping_Method{
     /**
     * Show response returns when debug is on
     */
-    function show_response( $response ){
+    public function show_response( $response ){
         global $woocommerce;
         if ( $this->debug == 'yes' ) {
                 $woocommerce->clear_messages();
@@ -587,7 +588,7 @@ class HypnoticShipper extends WC_Shipping_Method{
      * @since 1.0.0
      * @return string
      */
-    function generate_select_html ( $key, $data ) {
+    public function generate_select_html ( $key, $data ) {
         $html = '';
 
         if ( isset( $data['title'] ) && $data['title'] != '' ) $title = $data['title']; else $title = '';
