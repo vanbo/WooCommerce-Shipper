@@ -138,7 +138,7 @@ class HypnoticShipper extends WC_Shipping_Method{
     */
     function custombox_form_fields() {
 
-        $available_boxes = array('0' => 'Add New Box');
+        $available_boxes = array('0' => 'Add a new box');
         foreach( $this->available_boxes as $key => $box ){
             if ( $box['box_label'] ) {
                 $available_boxes[$key] = $box['box_label'];
@@ -149,61 +149,66 @@ class HypnoticShipper extends WC_Shipping_Method{
         $this->saved_boxes_field = array(
             'saved_boxes' => array(
                 'title' => __('Available Boxes', 'hypnoticzoo'),
+                'description' => __('These boxes will be used when packing your items.', 'hypnoticzoo'),
                 'type' => 'select',
                 'options' => $available_boxes
             ),
         );
 
         $this->box_form_fields = array(
-            'box_id' => array(
-                'type' => 'hidden'
-            ),
             'box_label' => array(
                 'title' => __('Label', 'hypnoticshipper'),
                 'type' => 'text',
                 'description' => __('Label your box for easier management.', 'hypnoticshipper'),
+                'rules' => 'string none'
             ),
             'box_width' => array(
                 'title' => __('Width', 'hypnoticshipper'),
                 'type' => 'text',
                 'description' => __('in ' . strtoupper($this->dimension_unit), 'hypnoticshipper'),
                 'css' => 'width: 5em;',
-                'class' => 'small'
+                'class' => 'small',
+                'rules' => 'int none'
             ),
             'box_length' => array(
                 'title' => __('Length', 'hypnoticshipper'),
                 'type' => 'text',
                 'description' => __('in ' . strtoupper($this->dimension_unit), 'hypnoticshipper'),
                 'css' => 'width: 5em;',
-                'class' => 'small'
+                'class' => 'small',
+                'rules' => 'int none'
             ),
             'box_height' => array(
                 'title' => __('Height', 'hypnoticshipper'),
                 'type' => 'text',
                 'description' => __('in ' . strtoupper($this->dimension_unit), 'hypnoticshipper'),
                 'css' => 'width: 5em;',
-                'class' => 'small'
+                'class' => 'small',
+                'rules' => 'int none'
             ),
             'box_girth' => array(
                 'title' => __('Height', 'hypnoticshipper'),
                 'type' => 'text',
                 'description' => __('in ' . strtoupper($this->dimension_unit), 'hypnoticshipper'),
                 'css' => 'width: 5em;',
-                'class' => 'small'
+                'class' => 'small',
+                'rules' => 'int none'
             ),
             'box_max_weight'  => array(
-                'title' => __('Max weight can hold', 'hypnoticshipper'),
+                'title' => __('Maximum weight', 'hypnoticshipper'),
                 'type' => 'text',
-                'description' => __('in ' . strtoupper($this->weight_unit), 'hypnoticshipper'),
+                'description' => __('The maximum weight the box can hold, in ' . strtoupper($this->weight_unit), 'hypnoticshipper'),
                 'css' => 'width: 5em;',
-                'class' => 'small'
+                'class' => 'small',
+                'rules' => 'int none'
             ),
             'box_max_unit'  => array(
                 'title' => __('Max units can hold', 'hypnoticshipper'),
                 'type' => 'text',
-                'description' => __('The maxiumum number of items can be put into the box.', 'hypnoticshipper'),
+                'description' => __('The maximum number of items can be put into the box.', 'hypnoticshipper'),
                 'css' => 'width: 5em;',
-                'class' => 'small'
+                'class' => 'small',
+                'rules' => 'int none'
             ),
             'box_remove' => array(
                 'type' => 'checkbox'
@@ -251,7 +256,8 @@ class HypnoticShipper extends WC_Shipping_Method{
                 'default' => '0'
             ),
             'fee_to_ship' => array(
-                'title' => __('Apply handling fee to shipping rate.', 'hypnoticzoo'),
+                'title' => __('', 'hypnoticzoo'),
+                'label' => __('Apply handling fee to shipping rate.', 'hypnoticzoo'),
                 'type' => 'checkbox',
                 'description' => __('Instead of applying handling fee to product value, apply it to shipping rate.', 'hypnoticzoo'),
                 'default' => 'no'
@@ -517,8 +523,8 @@ class HypnoticShipper extends WC_Shipping_Method{
         <table class="form-table wide">
 
             <?php
-            // Generate the HTML For the settings form.
-            $this->generate_settings_html();
+                // Generate the HTML For the settings form.
+                $this->generate_settings_html();
             ?>
 
         </table><!--/.form-table-->
@@ -532,8 +538,6 @@ class HypnoticShipper extends WC_Shipping_Method{
             ?>
 
             <tbody>
-                <input type="hidden" placeholder="" id="woocommerce_<?php echo $this->id; ?>_box_id" name="woocommerce_<?php echo $this->id; ?>_box_label" class="input-text regular-input ">
-
                 <tr valign="top">
                     <th class="titledesc" scope="row"><label for="woocommerce_<?php echo $this->id; ?>_box_label">Label</label></th>
                     <td class="forminp">
@@ -556,19 +560,19 @@ class HypnoticShipper extends WC_Shipping_Method{
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th class="titledesc" scope="row"><label for="woocommerce_<?php echo $this->id; ?>_box_max_weight">Max weight can hold</label></th>
+                    <th class="titledesc" scope="row"><label for="woocommerce_<?php echo $this->id; ?>_box_max_weight">Maximum weight</label></th>
                     <td class="forminp">
                         <fieldset>
-                            <legend class="screen-reader-text"><span>Max weight can hold</span></legend>
-                            <input type="text" placeholder="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_max_weight" name="woocommerce_<?php echo $this->id; ?>_box_max_weight" class="input-text regular-input small"> <span class="description">in LBS</span>
+                            <legend class="screen-reader-text"><span>Maximum weight</span></legend>
+                            <input type="text" placeholder="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_max_weight" name="woocommerce_<?php echo $this->id; ?>_box_max_weight" class="input-text regular-input small"> <p class="description">The maximum weight the box can hold, in <?php echo strtoupper($this->weight_unit); ?></p>
                         </fieldset>
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th class="titledesc" scope="row"><label for="woocommerce_<?php echo $this->id; ?>_box_max_unit">Max units can hold</label></th>
+                    <th class="titledesc" scope="row"><label for="woocommerce_<?php echo $this->id; ?>_box_max_unit">Maximum units</label></th>
                     <td class="forminp">
                         <fieldset>
-                            <legend class="screen-reader-text"><span>Max units can hold</span></legend>
+                            <legend class="screen-reader-text"><span>Maximum units</span></legend>
                             <input type="text" placeholder="" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_max_unit" name="woocommerce_<?php echo $this->id; ?>_box_max_unit" class="input-text regular-input small"> <p class="description">The maxiumum number of items can be put into the box.</p>
                         </fieldset>
                     </td>
@@ -578,7 +582,7 @@ class HypnoticShipper extends WC_Shipping_Method{
                     <th class="titledesc" scope="row"></th>
                     <td class="forminp">
                         <fieldset>
-                            <input type="checkbox" class="" value="yes" id="woocommerce_<?php echo $this->id; ?>_box_remove" name="woocommerce_<?php echo $this->id; ?>_box_remove">
+                            <input type="checkbox" class="" value="1" id="woocommerce_<?php echo $this->id; ?>_box_remove" name="woocommerce_<?php echo $this->id; ?>_box_remove">
 
                             <span class="description">Remove this box</span>
 
