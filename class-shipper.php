@@ -454,13 +454,17 @@ class HypnoticShipper extends WC_Shipping_Method{
     public function process_admin_options() {
         // Validate custom boxes and add to sanitized_fields
         $custom_box_fields = array();
+        $selected_box = array();
         $this->validate_settings_fields($this->box_form_fields, $custom_box_fields);
+        $this->validate_settings_fields($this->saved_boxes_field, $selected_box);
 
         // Validate normal setting fields
         $this->validate_settings_fields();
 
         if ( count( $this->errors ) > 0 ) {
-            $this->display_errors();
+            // $this->display_errors();
+            foreach ($this->errors as $error)
+                $this->add_log( $error, false );
             return false;
         } else {
 
@@ -474,10 +478,24 @@ class HypnoticShipper extends WC_Shipping_Method{
             }
 
             $this->sanitized_fields['available_boxes'] = $this->available_boxes;
+            $target_box = $selected_box['saved_boxes'];
 
-            if ( !$custom_box_fields['box_id'] )
-                $custom_box_fields['box_id'] = count($this->available_boxes) + 1;
-            $this->sanitized_fields['available_boxes'][$custom_box_fields['box_id']] = $custom_box_fields;
+            if ( $custom_box_fields['box_remove'] == 'yes' && $target_box != 0 ) {
+
+                // Remove the box
+                unset( $this->sanitized_fields['available_boxes'][$target_box] );
+
+            } elseif ( $custom_box_fields['box_remove'] == 'no' ) {
+
+                // Add or update the box
+                if ( $target_box == 0 )
+                    $target_box = count($this->available_boxes) + 1;
+                $this->sanitized_fields['available_boxes'][$target_box] = $custom_box_fields;
+
+            } else {
+                // Do nothing
+                pass;
+            }
 
             update_option( $this->plugin_id . $this->id . '_settings', $this->sanitized_fields );
             return true;
