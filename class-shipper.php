@@ -85,6 +85,7 @@ class HypnoticShipper extends WC_Shipping_Method{
 
         // Load the form fields.
         $this->load_containers();
+        $this->load_method_names();
         $this->init_form_fields();
         $this->add_form_fields();
         $this->sort_form_fiels();
@@ -135,6 +136,25 @@ class HypnoticShipper extends WC_Shipping_Method{
     }
 
     /**
+    * Fields for rename shipping method
+    */
+    public function rename_method_form_fields() {
+        $this->rename_method_form_fields = array(
+            'shipping_method' => array(
+                'title' => __('Shipping Method', 'hypnoticzoo'),
+                'description' => __('Choose a method to rename.', 'hypnoticzoo'),
+                'type' => 'select',
+                'class' => 'chosen_select',
+                'options' => array_merge(array('0' => ''), $this->shipping_methods)
+            ),
+            'new_name' => array(
+                'title' => __('New Name', 'hypnoticshipper'),
+                'type' => 'text',
+                'description' => __('Leave empty will change it back to its original name.', 'hypnoticshipper'),
+                'rules' => 'string none'
+            ),
+        );
+    }
     * Fields for custom box
     */
     function custombox_form_fields() {
@@ -310,6 +330,10 @@ class HypnoticShipper extends WC_Shipping_Method{
                 'type' => 'hidden',
                 'default' => array()
             ),
+            'renamed_methods' => array(
+                'type' => 'hidden',
+                'default' => array()
+            ),
 
         );
 
@@ -435,6 +459,18 @@ class HypnoticShipper extends WC_Shipping_Method{
 
         $this->usable_boxes = array_merge($this->carrier_boxes, $available_boxes);
     }
+
+    public function load_method_names() {
+        $method_names = array();
+
+        $form_field_settings = ( array ) get_option( $this->plugin_id . $this->id . '_settings' );
+        if ( isset($form_field_settings['renamed_methods']) && !empty($form_field_settings['renamed_methods']) ) {
+            $method_names = $form_field_settings['renamed_methods'];
+        }
+        $this->renamed_methods = $method_names;
+    }
+
+    /**
      * Validate Settings Field Data.
      *
      * Validate the data on the "Settings" form.
@@ -516,13 +552,28 @@ class HypnoticShipper extends WC_Shipping_Method{
 
             // Manipulate fields before save
             // Remove box settings to have it not saved as regular settings
-            $remove_fields = array_keys($this->box_form_fields);
+            $remove_box_fields = array_keys($this->box_form_fields);
+            $remove_naming_fields = array_keys($this->rename_method_form_fields);
+            $remove_fields = array_merge($remove_box_fields, $remove_naming_fields);
+
             foreach ( $this->sanitized_fields as $field => $value ) {
                 if ( in_array($field, $remove_fields) ) {
                     unset( $this->sanitized_fields[$field] );
                 }
             }
 
+            // Save renamed method
+            $this->sanitized_fields['renamed_methods'] = $this->renamed_methods;
+            if ($renamed_method['shipping_method'] != '') {
+                $method = $renamed_method['shipping_method'];
+                $new_name = $renamed_method['new_name'];
+                if ( $new_name != '' )
+                    $this->sanitized_fields['renamed_methods'][$method] = $new_name;
+                else
+                    unset($this->sanitized_fields['renamed_methods'][$method]);
+            }
+
+            // Save boxes settings
             $this->sanitized_fields['available_boxes'] = $this->available_boxes;
             $target_box = $selected_box['saved_boxes'];
 
