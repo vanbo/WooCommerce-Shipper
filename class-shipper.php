@@ -102,6 +102,7 @@ class HypnoticShipper extends WC_Shipping_Method{
         $this->custombox_form_fields();
 
         add_action('admin_notices', array(&$this, 'notification'));
+        add_action('woocommerce_update_options_shipping_' . $this->id, array(&$this, 'process_admin_options'), 1);
 
     }
 
