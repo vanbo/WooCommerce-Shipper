@@ -403,6 +403,19 @@ class HypnoticShipper extends WC_Shipping_Method{
     }
 
     /**
+    * Get a box from it's id
+    */
+    public function get_box( $id ) {
+        return $this->available_boxes[$id];
+    }
+
+    /**
+    * Validate a box
+    */
+    public function valid_box( $box ) {
+        return $box['box_width'] && $box['box_length'] && $box['box_height'];
+    }
+
     /**
     * Load containers
     */
@@ -518,7 +531,7 @@ class HypnoticShipper extends WC_Shipping_Method{
                 // Remove the box
                 unset( $this->sanitized_fields['available_boxes'][$target_box] );
 
-            } elseif ( $custom_box_fields['box_remove'] == 'no' ) {
+            } elseif ( $custom_box_fields['box_remove'] == 'no' && $this->valid_box($custom_box_fields) ) {
 
                 // Add or update the box
                 if ( $target_box == 0 )
