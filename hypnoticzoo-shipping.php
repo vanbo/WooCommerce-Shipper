@@ -49,11 +49,11 @@ class HipperShipper{
 
     function additional_product_meta(){
 
-        add_action( 'woocommerce_product_options_dimensions', 'woocommerce_usps_product_girth', 10 );
-        add_action( 'woocommerce_product_options_dimensions', 'woocommerce_usps_product_lettermail', 10 );
+        add_action( 'woocommerce_product_options_dimensions', 'woocommerce_product_girth', 10 );
+        add_action( 'woocommerce_product_options_dimensions', 'woocommerce_product_lettermail', 10 );
 
-        add_action( 'woocommerce_process_product_meta', 'woocommerce_usps_process_product_girth_metabox', 1 );
-        add_action( 'woocommerce_process_product_meta', 'woocommerce_usps_process_product_lettermail_metabox', 1 );
+        add_action( 'woocommerce_process_product_meta', 'woocommerce_process_product_girth_metabox', 1 );
+        add_action( 'woocommerce_process_product_meta', 'woocommerce_process_product_lettermail_metabox', 1 );
 
     }
 }
