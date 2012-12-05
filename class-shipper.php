@@ -78,6 +78,8 @@ class HypnoticShipper extends WC_Shipping_Method{
     */
     var $settings_order = array();
 
+    var $log = '';
+
     function __construct(){
         global $woocommerce;
 
@@ -403,10 +405,30 @@ class HypnoticShipper extends WC_Shipping_Method{
         $sanitized_fields = array();
 
         foreach ( $form_fields as $k => $v ) {
-            if ( ! isset( $v['type'] ) || ( $v['type'] == '' ) ) { $v['type'] == 'text'; } // Default to "text" field type.
+            if ( ! isset( $v['type'] ) || ( $v['type'] == '' ) ) { $v['type'] = 'text'; } // Default to "text" field type.
+
+            if ( ! isset( $v['rules'] ) || ( $v['rules'] == '' )  ) { $v['rules'] = 'none'; }
+
+            $rules = explode(' ', $v['rules']);
 
             if ( method_exists( $this, 'validate_' . $v['type'] . '_field' ) ) {
                 $field = $this->{'validate_' . $v['type'] . '_field'}( $k );
+
+                if ( $field == '' &&  !in_array('none', $rules))
+                    $this->errors['field_error_' . $k] = 'Value of ' . $v['title'] . ' can not be empty.';
+
+                if ( in_array('int', $rules) && $field && !is_numeric($field))
+                    $this->errors['field_error_' . $k] = 'Value of ' . $v['title'] . ' must be an integer number.';
+
+                if ( in_array('float', $rules) && $field && !is_numeric($field))
+                    $this->errors['field_error_' . $k] = 'Value of ' . $v['title'] . ' must be a float number.';
+
+                if ( in_array('numeric', $rules) && $field && !is_numeric($field))
+                    $this->errors['field_error_' . $k] = 'Value of ' . $v['title'] . ' must be a number.';
+
+                if ( in_array('string', $rules) && $field && !is_string($field))
+                    $this->errors['field_error_' . $k] = 'Value of ' . $v['title'] . ' must be a string.';
+
                 $sanitized_fields[$k] = $field;
             } else {
                 $sanitized_fields[$k] = $this->settings[$k];
