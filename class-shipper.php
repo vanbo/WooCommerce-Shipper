@@ -80,13 +80,14 @@ class HypnoticShipper extends WC_Shipping_Method{
 
     var $log = '';
 
-    function __construct(){
+    public function __construct(){
         global $woocommerce;
 
         // Load the form fields.
         $this->load_containers();
         $this->load_method_names();
         $this->init_form_fields();
+
         $this->add_form_fields();
         $this->sort_form_fiels();
 
@@ -112,7 +113,7 @@ class HypnoticShipper extends WC_Shipping_Method{
     /**
     * Notification upon condition checks
     */
-    function notification($issues=array()) {
+    public function notification($issues=array()) {
 
             $setting_url = 'admin.php?page=woocommerce_settings&tab=shipping&section=' . $this->id;
             $woocommerce_url = 'admin.php?page=woocommerce_settings&tab=general';
@@ -156,9 +157,11 @@ class HypnoticShipper extends WC_Shipping_Method{
             ),
         );
     }
+
+    /**
     * Fields for custom box
     */
-    function custombox_form_fields() {
+    public function custombox_form_fields() {
 
         $available_boxes = array('0' => 'Add a new box');
         foreach( $this->available_boxes as $key => $box ){
@@ -173,6 +176,7 @@ class HypnoticShipper extends WC_Shipping_Method{
                 'title' => __('Available Boxes', 'hypnoticzoo'),
                 'description' => __('These boxes will be used when packing your items.', 'hypnoticzoo'),
                 'type' => 'select',
+                'class' => 'chosen_select',
                 'options' => $available_boxes
             ),
         );
@@ -241,7 +245,7 @@ class HypnoticShipper extends WC_Shipping_Method{
     /**
      * Initialise Gateway Settings Form Fields
      */
-    function init_form_fields() {
+    public function init_form_fields() {
         global $woocommerce;
 
         $usable_boxes = array();
@@ -305,6 +309,15 @@ class HypnoticShipper extends WC_Shipping_Method{
                 'description' => __('Instead of applying handling fee to product value, apply it to shipping rate.', 'hypnoticzoo'),
                 'default' => 'no'
             ),
+            'selected_boxes' => array(
+                'title' => __('Boxes for packing', 'hypnoticzoo'),
+                'type' => 'multiselect',
+                'class' => 'chosen_select',
+                'css' => 'width: 25em;',
+                'description' => 'Select boxes you want use when packing your products',
+                'default' => array(),
+                'options' => $usable_boxes
+            ),
             'package_methods' => array(
                 'title' => __('Shipping Methods For Packages', 'hypnoticzoo'),
                 'type' => 'multiselect',
@@ -361,12 +374,12 @@ class HypnoticShipper extends WC_Shipping_Method{
     /**
     * Add additional form fields
     */
-    function add_form_fields(){}
+    public function add_form_fields(){}
 
     /**
     * Sort admin fields for displaying in order
     */
-    function sort_form_fiels(){
+    public function sort_form_fiels(){
 
         $fields = array();
 
@@ -393,7 +406,7 @@ class HypnoticShipper extends WC_Shipping_Method{
     /**
      * Shipping method available conditions
      */
-    function is_available() {
+    public function is_available() {
 
         if (!in_array($this->currency, $this->allowed_currencies))
             return false;
@@ -411,7 +424,7 @@ class HypnoticShipper extends WC_Shipping_Method{
     /**
     * Encode request
     */
-    function encode( $request ) {
+    public function encode( $request ) {
         global $hipperxmlparser;
 
         try {
@@ -424,7 +437,7 @@ class HypnoticShipper extends WC_Shipping_Method{
     /**
     * Decode the response to an array
     */
-    function decode( $response ) {
+    public function decode( $response ) {
         global $hipperxmlparser;
 
         try {
