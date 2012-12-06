@@ -39,6 +39,7 @@ class HipperShipper{
      */
     function includes() {
         include( 'class-shipper.php' );     //contains shipping class skeleton
+        include( 'class-package.php' );     //contains package class
         include( 'class-xmlparser.php' );   //contains xmlparser class
         include( 'product-meta.php' );      //contains extra product meta processors
     }
