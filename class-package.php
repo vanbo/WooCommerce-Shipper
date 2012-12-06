@@ -88,19 +88,67 @@ class HypnoticPackage{
     * 2. Return packed boxes with total weight, and unpacked items
     */
     public function packing () {
-        while( count( $this->items ) ){
 
-            foreach ( $this->items as $id => $item ) {
+        while( count( $this->items ) > count( $this->packed_items ) + count( $this->unpackable_items) ){
+
+            foreach ( $this->items as $item ) {
 
                 if ( $this->unpackable( $item ) ) {
                     $this->unpackable_items[] = $item;
-                    unset($this->items[$id]);
                     continue;
                 }
+
+                // if it's the first box, pack the item straightway
+                if( count($this->packed_containers) == 0 ) {
+
+                    foreach ( $this->containers as $container ) {
+
+                        if ( $this->can_put($item, $container) ) {
+                            $container['items'][] = $item;
+                            $this->packed_containers[] = $container;
+                            break;
+                        }
+                    }
+
+                } else {
+
+                    $packed = false;
+
+                    // try pack the item into a packed box first
+                    foreach ( $this->packed_containers as $container ) {
+
+                        if ( $this->can_put($item, $container) ) {
+                            $container['items'][] = $item;
+                            $packed = true;
+                            break;
+                        }
+
+                    }
+
+                    // if none packed box can hold this item, add a new box
+                    if ( !$packed ) {
+
+                        foreach ( $this->containers as $container ) {
+
+                            if ( $this->can_put($item, $container) ) {
+                                $container['items'][] = $item;
+                                $this->packed_containers[] = $container;
+                                break;
+                            }
+
+                        }
+
+                    }
+
+                }
+
+                // add this item to packed item list
+                $this->packed_items[] = $item;
 
             }
 
         }
+
     }
 
     /**
