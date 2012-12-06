@@ -31,6 +31,11 @@ class HypnoticPackage{
     /**
     * @var array
     */
+    var $packed_items = array();
+
+    /**
+    * @var array
+    */
     var $unpackable_items = array();
 
     /**
@@ -120,6 +125,26 @@ class HypnoticPackage{
     }
 
     /**
+    * function to get box's current unit count
+    */
+    public function get_box_unit_count ( $box ) {
+        if ( !isset($box['items']) ) return 0;
+        return count( $box['items'] );
+    }
+
+    /**
+    * function to get box's current weight
+    */
+    public function get_box_weight ( $box ) {
+        if ( !isset($box['items']) ) return 0;
+
+        $weight = 0;
+        foreach( $box['items'] as $packed_item ) {
+            $weight += $packed_item->get_weight();
+        }
+
+        return $weight;
+    }
     * Check if an item can fit into the box
     */
     public function can_fit ( $item, $box ) {
