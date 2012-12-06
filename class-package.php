@@ -145,6 +145,21 @@ class HypnoticPackage{
 
         return $weight;
     }
+
+    /**
+    * function to check if the box can pack anything
+    */
+    public function can_put ( $item, $box ) {
+
+        if ($box['box_max_weight'] < $this->get_box_weight($box) + $item->get_weight()
+            || $box['box_max_unit'] < $this->get_box_unit_count($box) + 1)
+            return false;
+
+        return $this->can_fit ( $item, $box );
+
+    }
+
+    /**
     * Check if an item can fit into the box
     */
     public function can_fit ( $item, $box ) {
