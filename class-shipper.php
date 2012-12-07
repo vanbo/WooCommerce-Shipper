@@ -252,7 +252,7 @@ class HypnoticShipper extends WC_Shipping_Method{
 
         if ( is_array($this->usable_boxes) ){
             foreach ( $this->usable_boxes as $key => $box) {
-                $usable_boxes[$key] = $box['label'];
+                $usable_boxes[$key] = $box['box_label'];
             }
         }
 
