@@ -11,7 +11,7 @@
  * @author      Andy Zhang
 */
 
-class HypnoticShipper extends WC_Shipping_Method{
+class HypnoticShipper extends WC_Shipping_Method {
 
     /**
     * @var string
@@ -94,8 +94,17 @@ class HypnoticShipper extends WC_Shipping_Method{
         // Load the settings.
         $this->init_settings();
 
-        foreach($this->settings as $key => $value){
+        foreach ( $this->settings as $key => $value ){
             if(array_key_exists($key, $this->form_fields)) $this->$key = $value;
+        }
+
+        // convert array containers to container objects
+        $containers = array();
+        if (is_array($this->selected_boxes)) {
+            foreach ( $this->selected_boxes as $container ) {
+                $containers[] = new HypnoticContainer($container);
+            }
+            $this->selected_boxes = $containers;
         }
 
         $this->shipping_methods = array_merge($this->package_shipping_methods, $this->letter_shipping_methods);
