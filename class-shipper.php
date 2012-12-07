@@ -303,6 +303,17 @@ class HypnoticShipper extends WC_Shipping_Method{
                 'description' => __('Instead of applying handling fee to product value, apply it to shipping rate.', 'hypnoticzoo'),
                 'default' => 'no'
             ),
+            'ship_type' => array(
+                'title' => __('Your products will be shipped', 'hypnoticzoo'),
+                'type' => 'select',
+                'default' => 'all',
+                'css' => 'width: 15em;',
+                'class' => 'chosen_select',
+                'options' => array(
+                    'together' => __('Together', 'hypnoticzoo'),
+                    'separate' => __('Separately', 'hypnoticzoo')
+                )
+            ),
             'selected_boxes' => array(
                 'title' => __('Boxes for packing', 'hypnoticzoo'),
                 'type' => 'multiselect',
