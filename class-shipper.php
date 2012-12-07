@@ -147,6 +147,7 @@ class HypnoticShipper extends WC_Shipping_Method{
                 'description' => __('Choose a method to rename.', 'hypnoticzoo'),
                 'type' => 'select',
                 'class' => 'chosen_select',
+                'css' => 'width: 25em;',
                 'options' => array_merge(array('0' => ''), $this->shipping_methods)
             ),
             'new_name' => array(
@@ -173,10 +174,11 @@ class HypnoticShipper extends WC_Shipping_Method{
         }
         $this->saved_boxes_field = array(
             'saved_boxes' => array(
-                'title' => __('Available Boxes', 'hypnoticzoo'),
+                'title' => __('Add/Edit Box', 'hypnoticzoo'),
                 'description' => __('These boxes will be used when packing your items.', 'hypnoticzoo'),
                 'type' => 'select',
                 'class' => 'chosen_select',
+                'css' => 'width: 25em;',
                 'options' => $available_boxes
             ),
         );
@@ -277,13 +279,6 @@ class HypnoticShipper extends WC_Shipping_Method{
                 'label' => __('Enable ' . $this->carrier, 'hypnoticshipper'),
                 'default' => 'yes'
             ),
-            'debug' => array(
-                'title' => __('Debug mode', 'hypnoticzoo'),
-                'type' => 'checkbox',
-                'label' => __('Enable Debug Mode', 'hypnoticzoo'),
-                'description' => __('This will output some debug information on your cart page, remember to turn this off when you done testing.', 'hypnoticzoo'),
-                'default' => 'no'
-            ),
             'title' => array(
                 'title' => __('Method Title', 'hypnoticshipper'),
                 'type' => 'text',
@@ -353,6 +348,13 @@ class HypnoticShipper extends WC_Shipping_Method{
                 'css' => 'width: 25em;',
                 'default' => '',
                 'options' => $woocommerce->countries->countries
+            ),
+            'debug' => array(
+                'title' => __('Debug mode', 'hypnoticzoo'),
+                'type' => 'checkbox',
+                'label' => __('Enable Debug Mode', 'hypnoticzoo'),
+                'description' => __('This will output some debug information on your cart page, remember to turn this off when you done testing.', 'hypnoticzoo'),
+                'default' => 'no'
             ),
             'available_boxes' => array(
                 'type' => 'hidden',
@@ -684,7 +686,7 @@ class HypnoticShipper extends WC_Shipping_Method{
                                 <input type="text" placeholder="Length" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_length" name="woocommerce_<?php echo $this->id; ?>_box_length" class="input-text regular-input small">
                                 <input type="text" placeholder="Height" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_height" name="woocommerce_<?php echo $this->id; ?>_box_height" class="input-text regular-input small">
                                 <input type="text" placeholder="Girth" style="width: 5em;" id="woocommerce_<?php echo $this->id; ?>_box_girth" name="woocommerce_<?php echo $this->id; ?>_box_girth" class="input-text regular-input small">
-                                <span class="description">in Inch.</span>
+                                <span class="description">in <?php echo strtoupper($this->dimension_unit); ?>.</span>
                             </fieldset>
                         </td>
                     </tr>
