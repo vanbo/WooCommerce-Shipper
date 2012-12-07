@@ -492,12 +492,13 @@ class HypnoticShipper extends WC_Shipping_Method{
             $available_boxes = $form_field_settings['available_boxes'];
 
             foreach ( $available_boxes as $key => $box ) {
-                if ( $box['box_label'] == '' ) $available_boxes[$key]['label'] = $box['box_width'] . ' x ' . $box['box_length'] . ' x ' . $box['box_height'] . ' in ' . strtoupper($this->dimension_unit);
+                if ( $box['box_label'] == '' ) $available_boxes[$key]['box_label'] = $box['box_width'] . ' x ' . $box['box_length'] . ' x ' . $box['box_height'] . ' in ' . strtoupper($this->dimension_unit);
             }
 
         }
 
-        $this->usable_boxes = array_merge($this->carrier_boxes, $available_boxes);
+        // We use + because we want keep the index.
+        $this->usable_boxes = $this->carrier_boxes + $available_boxes;
     }
 
     public function load_method_names() {
