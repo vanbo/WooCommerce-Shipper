@@ -521,7 +521,7 @@ class HypnoticShipper extends WC_Shipping_Method{
      * @param bool $form_fields (default: false)
      * @return void
      */
-    public function validate_settings_fields( $form_fields = false, &$other_sanitized_fields = none ) {
+    public function validate_settings_fields( $form_fields = false, &$other_sanitized_fields = NULL ) {
 
         if ( ! $form_fields )
             $form_fields = $this->form_fields;
@@ -559,7 +559,7 @@ class HypnoticShipper extends WC_Shipping_Method{
             }
         }
 
-        if ( $other_sanitized_fields != none ) {
+        if ( is_array($other_sanitized_fields) ) {
             $other_sanitized_fields = $sanitized_fields;
         } else {
             $this->sanitized_fields = $sanitized_fields;
@@ -635,7 +635,6 @@ class HypnoticShipper extends WC_Shipping_Method{
 
             } else {
                 // Do nothing
-                pass;
             }
 
             update_option( $this->plugin_id . $this->id . '_settings', $this->sanitized_fields );
