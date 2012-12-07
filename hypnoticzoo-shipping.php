@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 if ( ! class_exists('HipperShipper') ) { // Exit if framework alreay in use.
 
-class HipperShipper{
+class HipperShipper {
 
     /**
      * @var string
@@ -39,6 +39,7 @@ class HipperShipper{
      */
     function includes() {
         include( 'class-shipper.php' );     //contains shipping class skeleton
+        include( 'class-container.php' );   //contains container class
         include( 'class-package.php' );     //contains package class
         include( 'class-xmlparser.php' );   //contains xmlparser class
         include( 'product-meta.php' );      //contains extra product meta processors

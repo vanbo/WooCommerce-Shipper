@@ -11,7 +11,7 @@
  * @author      Andy Zhang
 */
 
-class HypnoticPackage{
+class HypnoticPackage {
 
     /**
     * @var array
@@ -52,7 +52,6 @@ class HypnoticPackage{
     * The constructor takes cart and containers as parameters
     */
     public function __construct( $cart, $containers = array() ){
-        global $woocommerce;
 
         // Get containers, with their reset dimensions
         foreach ( $containers as $container ) {
@@ -156,9 +155,9 @@ class HypnoticPackage{
     * Height <= Width <= Length
     */
     public function reset_position ( &$entity ) {
-        $dimensions = array($entity['height'], $entity['width'], $entity['length']);
+        $dimensions = array($entity->height, $entity->width, $entity->length);
         sort($dimensions);
-        list($entity['height'], $entity['width'], $entity['length']) = $dimensions;
+        list($entity->height, $entity->width, $entity->length) = $dimensions;
     }
 
     /**
@@ -211,14 +210,14 @@ class HypnoticPackage{
     * Check if an item can fit into the box
     */
     public function can_fit ( $item, $box ) {
-        return $item['width'] <= $box['width'] && $item['length'] <= $box['length'] && $item['height'] <= $box['height'];
+        return $item->width <= $box->width && $item->length <= $box->length && $item->height <= $box->height;
     }
 
     /**
     * Get the volume of an item or a box
     */
     public function get_volume ( $entity ) {
-        return $entity['height'] * $entity['length'] * $entity['width'];
+        return $entity->height * $entity->length * $entity->width;
     }
 
     public static function compare_volume ( $alpha, $omega ) {
