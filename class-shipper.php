@@ -143,8 +143,7 @@ class HypnoticShipper extends WC_Shipping_Method{
     public function rename_method_form_fields() {
         $this->rename_method_form_fields = array(
             'shipping_method' => array(
-                'title' => __('Shipping Method', 'hypnoticzoo'),
-                'description' => __('Choose a method to rename.', 'hypnoticzoo'),
+                'title' => __('Pick a method to rename', 'hypnoticzoo'),
                 'type' => 'select',
                 'class' => 'chosen_select',
                 'css' => 'width: 25em;',
@@ -717,7 +716,7 @@ class HypnoticShipper extends WC_Shipping_Method{
 
                                 <span class="description">Remove this box</span>
 
-                                <input type="submit" value="Save" class="button-primary" name="save">
+                                <input type="submit" value="Save" class="button-secondary" name="save">
                             </fieldset>
                         </td>
                     </tr>
@@ -737,7 +736,7 @@ class HypnoticShipper extends WC_Shipping_Method{
                         <th class="titledesc" scope="row"></th>
                         <td class="forminp">
                             <fieldset>
-                                <input type="submit" value="Save" class="button-primary" name="save">
+                                <input type="submit" value="Save" class="button-secondary" name="save">
                             </fieldset>
                         </td>
                     </tr>
