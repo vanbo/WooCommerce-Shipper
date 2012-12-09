@@ -11,7 +11,7 @@
  * @author      Andy Zhang
 */
 
-class HypnoticPackage{
+class HypnoticPackage {
 
     /**
     * @var array
@@ -39,6 +39,11 @@ class HypnoticPackage{
     var $unpackable_items = array();
 
     /**
+    * @var array
+    */
+    var $weight_limit = 0;
+
+    /**
     * @var string
     */
     var $weight_unit = 'lbs';
@@ -52,7 +57,6 @@ class HypnoticPackage{
     * The constructor takes cart and containers as parameters
     */
     public function __construct( $cart, $containers = array() ){
-        global $woocommerce;
 
         // Get containers, with their reset dimensions
         foreach ( $containers as $container ) {
@@ -156,9 +160,9 @@ class HypnoticPackage{
     * Height <= Width <= Length
     */
     public function reset_position ( &$entity ) {
-        $dimensions = array($entity['height'], $entity['width'], $entity['length']);
+        $dimensions = array($entity->height, $entity->width, $entity->length);
         sort($dimensions);
-        list($entity['height'], $entity['width'], $entity['length']) = $dimensions;
+        list($entity->height, $entity->width, $entity->length) = $dimensions;
     }
 
     /**
@@ -173,34 +177,15 @@ class HypnoticPackage{
     }
 
     /**
-    * function to get box's current unit count
-    */
-    public function get_box_unit_count ( $box ) {
-        if ( !isset($box['items']) ) return 0;
-        return count( $box['items'] );
-    }
-
-    /**
-    * function to get box's current weight
-    */
-    public function get_box_weight ( $box ) {
-        if ( !isset($box['items']) ) return 0;
-
-        $weight = 0;
-        foreach( $box['items'] as $packed_item ) {
-            $weight += $packed_item->get_weight();
-        }
-
-        return $weight;
-    }
-
-    /**
     * function to check if the box can pack anything
     */
     public function can_put ( $item, $box ) {
 
-        if ($box['box_max_weight'] < $this->get_box_weight($box) + $item->get_weight()
-            || $box['box_max_unit'] < $this->get_box_unit_count($box) + 1)
+        if ( $this->weight_limit != 0 && $this->weight_limit < $box->get_weight() + $item->get_weight() )
+            return false;
+
+        if ( $box->max_weight < $box->get_weight() + $item->get_weight()
+            || $box->max_unit < $box->get_unit_count() + 1 )
             return false;
 
         return $this->can_fit ( $item, $box );
@@ -211,14 +196,14 @@ class HypnoticPackage{
     * Check if an item can fit into the box
     */
     public function can_fit ( $item, $box ) {
-        return $item['width'] <= $box['width'] && $item['length'] <= $box['length'] && $item['height'] <= $box['height'];
+        return $item->width <= $box->width && $item->length <= $box->length && $item->height <= $box->height;
     }
 
     /**
     * Get the volume of an item or a box
     */
     public function get_volume ( $entity ) {
-        return $entity['height'] * $entity['length'] * $entity['width'];
+        return $entity->height * $entity->length * $entity->width;
     }
 
     public static function compare_volume ( $alpha, $omega ) {

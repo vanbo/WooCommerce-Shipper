@@ -11,7 +11,7 @@
  * @author      Andy Zhang
 */
 
-class HypnoticShipper extends WC_Shipping_Method{
+class HypnoticShipper extends WC_Shipping_Method {
 
     /**
     * @var string
@@ -94,8 +94,17 @@ class HypnoticShipper extends WC_Shipping_Method{
         // Load the settings.
         $this->init_settings();
 
-        foreach($this->settings as $key => $value){
+        foreach ( $this->settings as $key => $value ){
             if(array_key_exists($key, $this->form_fields)) $this->$key = $value;
+        }
+
+        // convert array containers to container objects
+        $containers = array();
+        if (is_array($this->selected_boxes)) {
+            foreach ( $this->selected_boxes as $container ) {
+                $containers[] = new HypnoticContainer($container);
+            }
+            $this->selected_boxes = $containers;
         }
 
         $this->shipping_methods = array_merge($this->package_shipping_methods, $this->letter_shipping_methods);
@@ -434,6 +443,17 @@ class HypnoticShipper extends WC_Shipping_Method{
     }
 
     /**
+    * Check if this shippment is international shipping
+    */
+    public function is_intel_shipping() {
+        global $woocommerce;
+
+        $customer = $woocommerce->customer;
+        $destination_country = $customer->get_shipping_country();
+        return in_array( $country, $this->allowed_origin_countries );
+    }
+
+    /**
     * Encode request
     */
     public function encode( $request ) {
@@ -492,12 +512,13 @@ class HypnoticShipper extends WC_Shipping_Method{
             $available_boxes = $form_field_settings['available_boxes'];
 
             foreach ( $available_boxes as $key => $box ) {
-                if ( $box['box_label'] == '' ) $available_boxes[$key]['label'] = $box['box_width'] . ' x ' . $box['box_length'] . ' x ' . $box['box_height'] . ' in ' . strtoupper($this->dimension_unit);
+                if ( $box['box_label'] == '' ) $available_boxes[$key]['box_label'] = $box['box_width'] . ' x ' . $box['box_length'] . ' x ' . $box['box_height'] . ' in ' . strtoupper($this->dimension_unit);
             }
 
         }
 
-        $this->usable_boxes = array_merge($this->carrier_boxes, $available_boxes);
+        // We use + because we want keep the index.
+        $this->usable_boxes = $this->carrier_boxes + $available_boxes;
     }
 
     public function load_method_names() {
@@ -520,7 +541,7 @@ class HypnoticShipper extends WC_Shipping_Method{
      * @param bool $form_fields (default: false)
      * @return void
      */
-    public function validate_settings_fields( $form_fields = false, &$other_sanitized_fields = none ) {
+    public function validate_settings_fields( $form_fields = false, &$other_sanitized_fields = NULL ) {
 
         if ( ! $form_fields )
             $form_fields = $this->form_fields;
@@ -558,7 +579,7 @@ class HypnoticShipper extends WC_Shipping_Method{
             }
         }
 
-        if ( $other_sanitized_fields != none ) {
+        if ( is_array($other_sanitized_fields) ) {
             $other_sanitized_fields = $sanitized_fields;
         } else {
             $this->sanitized_fields = $sanitized_fields;
@@ -634,7 +655,6 @@ class HypnoticShipper extends WC_Shipping_Method{
 
             } else {
                 // Do nothing
-                pass;
             }
 
             update_option( $this->plugin_id . $this->id . '_settings', $this->sanitized_fields );
