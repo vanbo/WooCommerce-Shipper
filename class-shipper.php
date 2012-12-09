@@ -443,6 +443,17 @@ class HypnoticShipper extends WC_Shipping_Method {
     }
 
     /**
+    * Check if this shippment is international shipping
+    */
+    public function is_intel_shipping() {
+        global $woocommerce;
+
+        $customer = $woocommerce->customer;
+        $destination_country = $customer->get_shipping_country();
+        return in_array( $country, $this->allowed_origin_countries );
+    }
+
+    /**
     * Encode request
     */
     public function encode( $request ) {
