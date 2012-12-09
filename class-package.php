@@ -172,26 +172,6 @@ class HypnoticPackage {
     }
 
     /**
-    * function to get box's current unit count
-    */
-    public function get_box_unit_count ( $box ) {
-        if ( !isset($box['items']) ) return 0;
-        return count( $box['items'] );
-    }
-
-    /**
-    * function to get box's current weight
-    */
-    public function get_box_weight ( $box ) {
-        if ( !isset($box['items']) ) return 0;
-
-        $weight = 0;
-        foreach( $box['items'] as $packed_item ) {
-            $weight += $packed_item->get_weight();
-        }
-
-        return $weight;
-    }
 
     /**
     * function to check if the box can pack anything

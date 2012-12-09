@@ -27,6 +27,12 @@ class HypnoticContainer {
     */
     var $height = 0;
 
+
+    /**
+    * @var int
+    */
+    var $weight = 0;
+
     /**
     * @var int
     */
@@ -43,7 +49,7 @@ class HypnoticContainer {
     var $items = array();
 
     public function __construct ( $container = NULL ) {
-        if ( $container == NULL ) {
+        if ( $container != NULL ) {
 
             foreach ( $container as $key => $value ) {
                 $property = str_replace('box_', '', $key);
