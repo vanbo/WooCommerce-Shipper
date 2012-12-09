@@ -39,6 +39,11 @@ class HypnoticPackage {
     var $unpackable_items = array();
 
     /**
+    * @var array
+    */
+    var $weight_limit = 0;
+
+    /**
     * @var string
     */
     var $weight_unit = 'lbs';
@@ -172,14 +177,15 @@ class HypnoticPackage {
     }
 
     /**
-
-    /**
     * function to check if the box can pack anything
     */
     public function can_put ( $item, $box ) {
 
-        if ($box['box_max_weight'] < $this->get_box_weight($box) + $item->get_weight()
-            || $box['box_max_unit'] < $this->get_box_unit_count($box) + 1)
+        if ( $this->weight_limit != 0 && $this->weight_limit < $box->get_weight() + $item->get_weight() )
+            return false;
+
+        if ( $box->max_weight < $box->get_weight() + $item->get_weight()
+            || $box->max_unit < $box->get_unit_count() + 1 )
             return false;
 
         return $this->can_fit ( $item, $box );
