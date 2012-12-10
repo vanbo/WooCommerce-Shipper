@@ -25,7 +25,6 @@ class HipperShipper {
 
         // Include required files
         $this->includes();
-        $this->globals();
         $this->additional_product_meta();
 
     }
@@ -38,15 +37,11 @@ class HipperShipper {
      * @return void
      */
     function includes() {
-        include( 'class-shipper.php' );     //contains shipping class skeleton
-        include( 'class-container.php' );   //contains container class
-        include( 'class-package.php' );     //contains package class
-        include( 'class-xmlparser.php' );   //contains xmlparser class
-        include( 'product-meta.php' );      //contains extra product meta processors
-    }
-
-    function globals() {
-        $GLOBALS['hipperxmlparser'] = new HipperXMLParser();
+        include( 'classes/class-shipper.php' );     //contains shipping class skeleton
+        include( 'classes/class-container.php' );   //contains container class
+        include( 'classes/class-package.php' );     //contains package class
+        include( 'classes/class-xmlparser.php' );   //contains xmlparser class
+        include( 'product-meta.php' );              //contains extra product meta processors
     }
 
     function additional_product_meta(){
