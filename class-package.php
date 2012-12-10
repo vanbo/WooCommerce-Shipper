@@ -202,12 +202,12 @@ class HypnoticPackage {
     /**
     * Get the volume of an item or a box
     */
-    public function get_volume ( $entity ) {
+    public static function get_volume ( $entity ) {
         return $entity->height * $entity->length * $entity->width;
     }
 
     public static function compare_volume ( $alpha, $omega ) {
-        return ( $this->get_volume( $alpha ) > $this->get_volume( $omega ) ) ? 1 : -1;
+        return ( self::get_volume( $alpha ) > self::get_volume( $omega ) ) ? 1 : -1;
     }
 
     /**
