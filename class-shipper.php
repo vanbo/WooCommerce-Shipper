@@ -451,8 +451,8 @@ class HypnoticShipper extends WC_Shipping_Method {
         global $woocommerce;
 
         $customer = $woocommerce->customer;
-        $destination_country = $customer->get_shipping_country();
-        return in_array( $country, $this->allowed_origin_countries );
+        $country = $customer->get_shipping_country();
+        return !in_array( $country, $this->allowed_origin_countries );
     }
 
     /**
