@@ -102,12 +102,25 @@ class HypnoticShipper extends WC_Shipping_Method {
         $containers = array();
         if (is_array($this->selected_boxes)) {
             foreach ( $this->selected_boxes as $container ) {
-                $containers[] = new HypnoticContainer($container);
+                $containers[] = new HypnoticContainer($this->usable_boxes[$container]);
             }
             $this->selected_boxes = $containers;
         }
 
         $this->shipping_methods = array_merge($this->package_shipping_methods, $this->letter_shipping_methods);
+
+        foreach ( $this->shipping_methods as $key => $method ) {
+            if ( array_key_exists($key, $this->renamed_methods) ) {
+                $this->package_shipping_methods[$key] = $this->renamed_methods[$key];
+            }
+        }
+
+        if ( isset($this->package_methods) && (!is_array($this->package_methods) || empty($this->package_methods)) )
+            $this->package_methods = array_keys( $this->package_shipping_methods );
+
+        if ( isset($this->letter_methods) && (!is_array($this->letter_methods) || empty($this->letter_methods)) )
+            $this->letter_methods = array_keys( $this->letter_shipping_methods );
+
         $this->origin_country = $woocommerce->countries->get_base_country();
         $this->currency = get_woocommerce_currency();
 
@@ -275,7 +288,7 @@ class HypnoticShipper extends WC_Shipping_Method {
 
         foreach ( $this->letter_shipping_methods as $key => $method ) {
             if ( array_key_exists($key, $this->renamed_methods) ) {
-                $this->package_shipping_methods[$key] = $this->renamed_methods[$key];
+                $this->letter_shipping_methods[$key] = $this->renamed_methods[$key];
             }
         }
 
