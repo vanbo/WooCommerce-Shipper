@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * HypnoticShipper
  *
  * The HypnoticShipper class is skeleton class to be inherented by actual shipping extension.

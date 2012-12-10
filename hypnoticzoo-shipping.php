@@ -1,4 +1,13 @@
 <?php
+/**
+ * Hypnotic Zoo Shipper
+ *
+ * @package     WooCommerce-Shipper
+ * @category    Core
+ * @author      Andy Zhang
+ * @version     1.0
+ * @distributor www.hypnoticzoo.com
+ */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
