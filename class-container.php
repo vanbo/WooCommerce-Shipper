@@ -8,6 +8,7 @@
  * @version     1.0
  * @package     WooCommerce-Shipper/Classes
  * @author      Andy Zhang
+ * @distributor   www.hypnoticzoo.com
 */
 
 class HypnoticContainer {

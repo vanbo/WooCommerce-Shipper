@@ -9,6 +9,7 @@
  * @version     1.0
  * @package     WooCommerce-Shipper/Classes
  * @author      Andy Zhang
+ * @distributor www.hypnoticzoo.com
 */
 
 class HypnoticShipper extends WC_Shipping_Method {
