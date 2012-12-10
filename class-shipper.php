@@ -427,18 +427,20 @@ class HypnoticShipper extends WC_Shipping_Method {
     /**
      * Shipping method available conditions
      */
-    public function is_available() {
-
-        if (!in_array($this->currency, $this->allowed_currencies))
+    public function is_available( $package ) {
+        if ( $this->ship_type == 'together' && (!is_array($this->selected_boxes) || empty($this->selected_boxes)) )
             return false;
 
-        if (!in_array($this->origin_country, $this->allowed_origin_countries))
+        if ( !in_array($this->currency, $this->allowed_currencies) )
             return false;
 
-        if (empty($this->letter_shipping_methods) && empty($this->package_shipping_methods))
+        if ( !in_array($this->origin_country, $this->allowed_origin_countries) )
             return false;
 
-        return parent::is_available();
+        if ( empty($this->letter_shipping_methods) && empty($this->package_shipping_methods) )
+            return false;
+
+        return parent::is_available( $package );
 
     }
 
