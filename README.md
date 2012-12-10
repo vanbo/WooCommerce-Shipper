@@ -28,3 +28,6 @@ We are excited to see your contribution to make it better, no matter if you are 
 To start using the WooCommerce Shipper, check it out from the repo, and place it inside your extension as a folder.
 
 Include HypnoticShipper in hypnoticzoo-shipping.php and you are ready to write more of your extension.
+
+= ACKNOWLEDGEMENT =
+The HipperXMLParser is based on: http://snipplr.com/view/3491
