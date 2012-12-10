@@ -3,6 +3,7 @@
 * HipperXMLParser
 *
 * The HipperXMLParser class is used to encode and decode xml from or to an array
+* Based on: http://snipplr.com/view/3491/
 *
 * @class       HipperXMLParser
 * @version     1.0
