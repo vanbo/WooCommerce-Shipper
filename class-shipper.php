@@ -305,11 +305,11 @@ class HypnoticShipper extends WC_Shipping_Method {
                 'description' => __('Fee excluding tax. Enter an amount, e.g. 2.50, or a percentage, e.g. 5%.', 'hypnoticzoo'),
                 'default' => '0'
             ),
-            'fee_to_ship' => array(
+            'fee_to_cart' => array(
                 'title' => __('', 'hypnoticzoo'),
-                'label' => __('Apply handling fee to shipping rate.', 'hypnoticzoo'),
+                'label' => __('Apply handling fee to the value of cart.', 'hypnoticzoo'),
                 'type' => 'checkbox',
-                'description' => __('Instead of applying handling fee to product value, apply it to shipping rate.', 'hypnoticzoo'),
+                'description' => __('Instead of applying handling fee to shipping rate, apply it to the value of cart.', 'hypnoticzoo'),
                 'default' => 'no'
             ),
             'ship_type' => array(
