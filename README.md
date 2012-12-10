@@ -5,7 +5,7 @@ Requires WooCommerce at least: 1.5.4
 
 == Description ==
 
-Help create a better shipping solution for WooCommerce. Help other shipping extension to delivery more accurate shipping quotes, build clean and comprehensive UI, and provide the ability to simulate real-life shipping situations.
+The WooCommerce shipper will help create a better shipping solution for WooCommerce. Help other shipping extension to delivery more accurate shipping quotes, build clean and comprehensive UI, and provide the ability to simulate real-life shipping situations.
 
 WooCommerce Shipper is built by Hypnotic Zoo who also contributes many shipping extensions for WooCommerce that provide real-time shipping quotes for your shop.
 
