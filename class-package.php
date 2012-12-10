@@ -170,7 +170,7 @@ class HypnoticPackage {
     */
     public function unpackable ( $item ) {
         foreach ( $this->containers as $container ) {
-            if ( !$this->can_fit ($item, $container) )
+            if ( $this->can_fit ($item, $container) )
                 return false;
         }
         return true;
