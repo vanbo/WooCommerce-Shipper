@@ -58,7 +58,13 @@ class HypnoticPackage {
     */
     public function __construct( $cart, $containers = array() ){
 
+        $this->unit_count = 0;
+        $this->unpacked_unit_count = 0;
+
         // Get containers, with their reset dimensions
+        if ( !is_array($containers) )
+            $containers = array();
+
         foreach ( $containers as $container ) {
             $this->reset_position( $container );
             $this->containers[] = $container;
@@ -73,9 +79,8 @@ class HypnoticPackage {
 
                 $this->reset_position( $item );
 
-                for ($i = 0; $i < $quantity; $i++) {
-                    $this->items[] = $item;
-                }
+                $this->items[] = array('data' => $item, 'quantity' => $quantity);
+                $this->unit_count += $quantity;
 
             }
 
@@ -93,61 +98,70 @@ class HypnoticPackage {
     */
     public function packing () {
 
-        while( count( $this->items ) > count( $this->packed_items ) + count( $this->unpackable_items) ){
+        while( $this->unit_count > count( $this->packed_items ) + $this->unpacked_unit_count ){
 
-            foreach ( $this->items as $item ) {
+            foreach ( $this->items as $product ) {
+                $item = $product['data'];
 
                 if ( $this->unpackable( $item ) ) {
-                    $this->unpackable_items[] = $item;
+
+                    $this->unpackable_items[] = array( 'data' => $item, 'quantity' => $product['quantity'] );
+                    $this->unpacked_unit_count += $product['quantity'];
                     continue;
+
                 }
 
-                // if it's the first box, pack the item straightway
-                if( count($this->packed_containers) == 0 ) {
+                for ($i = 0; $i < $product['quantity']; $i++ ) {
 
-                    foreach ( $this->containers as $container ) {
-
-                        if ( $this->can_put($item, $container) ) {
-                            $container['items'][] = $item;
-                            $this->packed_containers[] = $container;
-                            break;
-                        }
-                    }
-
-                } else {
-
-                    $packed = false;
-
-                    // try pack the item into a packed box first
-                    foreach ( $this->packed_containers as $container ) {
-
-                        if ( $this->can_put($item, $container) ) {
-                            $container['items'][] = $item;
-                            $packed = true;
-                            break;
-                        }
-
-                    }
-
-                    // if none packed box can hold this item, add a new box
-                    if ( !$packed ) {
+                    // if it's the first box, pack the item straightway
+                    if( count($this->packed_containers) == 0 ) {
 
                         foreach ( $this->containers as $container ) {
 
                             if ( $this->can_put($item, $container) ) {
-                                $container['items'][] = $item;
+                                $container = clone $container;
+                                $container->items[] = $item;
                                 $this->packed_containers[] = $container;
                                 break;
+                            }
+                        }
+
+                    } else {
+
+                        $packed = false;
+
+                        // try pack the item into a packed box first
+                        foreach ( $this->packed_containers as $container ) {
+
+                            if ( $this->can_put($item, $container) ) {
+                                $container->items[] = $item;
+                                $packed = true;
+                                break;
+                            }
+
+                        }
+
+                        // if none packed box can hold this item, add a new box
+                        if ( !$packed ) {
+
+                            foreach ( $this->containers as $container ) {
+
+                                if ( $this->can_put($item, $container) ) {
+                                    $container = clone $container;
+                                    $container->items[] = $item;
+                                    $this->packed_containers[] = $container;
+                                    break;
+                                }
+
                             }
 
                         }
 
                     }
 
+                    // add this item to packed item list
+                    $this->packed_items[] = $item;
                 }
-
-                // add this item to packed item list
-                $this->packed_items[] = $item;
 
             }
 
@@ -232,8 +246,10 @@ class HypnoticPackage {
         if ( $this->weight_limit != 0 && $this->weight_limit < $box->get_weight() + $item->get_weight() )
             return false;
 
-        if ( $box->max_weight < $box->get_weight() + $item->get_weight()
-            || $box->max_unit < $box->get_unit_count() + 1 )
+        if ( $box->max_weight > 0 && $box->max_weight < $box->get_weight() + $item->get_weight() )
+            return false;
+
+        if ( $box->max_unit > 0 &&  $box->max_unit < $box->get_unit_count() + 1 )
             return false;
 
         return $this->can_fit ( $item, $box );
