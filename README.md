@@ -7,7 +7,7 @@ Requires WooCommerce at least: 1.5.4
 
 The WooCommerce shipper will help create a better shipping solution for WooCommerce. Help other shipping extension to delivery more accurate shipping quotes, build clean and comprehensive UI, and provide the ability to simulate real-life shipping situations.
 
-WooCommerce Shipper is built by Hypnotic Zoo who also contributes many shipping extensions for WooCommerce that provide real-time shipping quotes for your shop.
+WooCommerce Shipper is built by Hypnotic Zoo who also contributes to other shipping extensions for WooCommerce that provide real-time shipping quotes for your shop.
 
 Our shipping extensions:
 USPS:           http://www.woothemes.com/products/usps-shipping-method
@@ -22,11 +22,11 @@ Build upon core Wordpress and WooCommerce functionality for stability, utilise n
 
 = SMART PACKING =
 
-We are attempting something that other shipping extensions (including other e-commerce platforms) never do. By allowing utilise carrier sell boxes, as well as define your own boxes, we are simulating the real world packing solution in a fast, simple way.
+We are attempting something that other shipping extensions (including other e-commerce platforms) never do. By allowing the customer to utilise carrier sell boxes, as well as define your own boxes, we are simulating the real world packing solution in a fast, simple way.
 
 = GET INVOLVED =
 
-We are excited to see your contribution to make it better, no matter if you are a developer, a WooCommerce user or just interested in checking out new stuff. We also encourage you fork our repo to make awesome changes from https://github.com/HypnoticZoo/WooCommerce-Shipper.
+We are excited to see your contribution, to make it better, no matter if you are a developer, a WooCommerce user or just interested in checking out our new stuff. We also encourage you to fork our repo to make awesome changes from https://github.com/HypnoticZoo/WooCommerce-Shipper.
 
 = INSTALLATION =
 
