@@ -155,6 +155,54 @@ class HypnoticPackage {
 
     }
 
+
+    /**
+    * Set package weight unit and convert all items' weight to be usable
+    */
+    public function set_weight_unit( $unit ) {
+
+        $this->weight_unit = $unit;
+
+        foreach ( $this->items as $item ) {
+
+            $this->unify_weight( $item['data'] );
+
+        }
+    }
+
+    /**
+    * Set package dimension unit and convert all items' dimensions to be usable
+    */
+    public function set_dimension_unit( $unit ) {
+
+        $this->dimension_unit = $unit;
+
+        foreach ( $this->items as $item ) {
+
+            $this->unify_dimensions( $item['data'] );
+
+        }
+    }
+
+    /**
+    * convert weight to something usable by the package
+    */
+    public function unify_weight ( &$item ) {
+        $item->weight = woocommerce_get_weight( $item->get_weight(), $this->weight_unit );
+    }
+
+    /**
+    * convert dimensions to something usable by the package
+    */
+    public function unify_dimensions ( &$item ) {
+
+        $dimensions = array( 'width', 'height', 'length' );
+        foreach( $dimensions as $dimension ) {
+            $item->$dimension = woocommerce_get_dimension( $item->$dimension, $this->dimension_unit );
+        }
+
+    }
+
     /**
     * Reset the entity to have its dimension in such order:
     * Height <= Width <= Length
