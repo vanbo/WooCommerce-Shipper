@@ -169,6 +169,7 @@ class HypnoticShipper extends WC_Shipping_Method {
                 'title' => __('Pick a method to rename', 'hypnoticzoo'),
                 'type' => 'select',
                 'class' => 'chosen_select',
+                'description' => __('Rename one of the ' . $this->carrier . ' shipping methods to suit your shop.', 'hypnoticzoo'),
                 'css' => 'width: 25em;',
                 'options' => array_merge(array('0' => ''), $this->shipping_methods)
             ),
@@ -342,7 +343,7 @@ class HypnoticShipper extends WC_Shipping_Method {
                 'type' => 'multiselect',
                 'class' => 'chosen_select',
                 'css' => 'width: 25em;',
-                'description' => 'Select boxes you want use when packing your products',
+                'description' => 'Select boxes you want use when packing your products. <br />For information about some predefined boxes, See <a target="blank" href="http://auspost.com.au/personal/packaging-materials.html">here</a>',
                 'default' => array(),
                 'options' => $usable_boxes
             ),
