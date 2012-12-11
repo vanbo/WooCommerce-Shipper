@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * HypnoticPackage
  *
  * HypnoticPackage contains the shopping cart items. It manage and packing the items

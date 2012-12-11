@@ -46,12 +46,12 @@ class HipperXMLParser {
 
             // if there is another array found recursively call this function
             if (is_array($value)) {
-                $node = ( ArrayToXML::isAssoc($value) || $numeric ) ? $xml->addChild($key) : $xml;
+                $node = ( HipperXMLParser::isAssoc($value) || $numeric ) ? $xml->addChild($key) : $xml;
 
                 // recursive call.
                 if ($numeric)
                     $key = 'anon';
-                ArrayToXML::toXml($value, $key, $node);
+                HipperXMLParser::toXml($value, $key, $node);
             } else {
 
                 // add single node.
@@ -79,7 +79,7 @@ class HipperXMLParser {
             return (string) $xml;
         $arr = array();
         foreach ($children as $key => $node) {
-            $node = ArrayToXML::toArray($node);
+            $node = HipperXMLParser::toArray($node);
 
             // support for 'anon' non-associative arrays
             if ($key == 'anon')
