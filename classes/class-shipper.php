@@ -128,8 +128,8 @@ class HypnoticShipper extends WC_Shipping_Method {
         $this->custombox_form_fields();
         $this->rename_method_form_fields();
 
-        add_action('admin_notices', array(&$this, 'notification'));
-        add_action('woocommerce_update_options_shipping_' . $this->id, array(&$this, 'process_admin_options'), 1);
+        add_action( 'admin_notices', array(&$this, 'notification') );
+        add_action( 'woocommerce_update_options_shipping_' . $this->id, array(&$this, 'process_admin_options'), 1);
 
     }
 
@@ -791,6 +791,35 @@ class HypnoticShipper extends WC_Shipping_Method {
             </table>
         </div>
         <div class="clear"></div>
+
+
+        <?php $js_data = apply_filters('hypnoticzoo_shipping_assets', $this->id); ?>
+        <script type="text/javascript">
+            jQuery(window).load(function(){
+                var $method_id = '<?php echo $this->id; ?>';
+                <?php 
+                    foreach ( $js_data as $param => $data )
+                        echo 'var $' . $param . ' = ' . $data . ';';
+                ?>
+
+                jQuery('select#woocommerce_' + $method_id + '_saved_boxes').change(function(){
+                    box = $available_boxes[jQuery(this).val()];
+                    for (var key in box) {
+                        if (box.hasOwnProperty(key)) {
+
+                            jQuery('#woocommerce_' + $method_id + '_' + key).val(box[key]);
+
+                        }
+                    }
+                });
+
+                jQuery('select#woocommerce_' + $method_id + '_shipping_method').change(function(){
+                    method = $renamed_methods[jQuery(this).val()];
+                    jQuery('#woocommerce_' + $method_id + '_new_name').val(method);
+                });
+
+            });
+        </script>
         <?php
     }
 
