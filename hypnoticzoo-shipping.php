@@ -46,14 +46,17 @@ class HipperShipper {
      * @return void
      */
     function includes() {
+        if ( is_admin() ) include( 'admin/hypnoticzoo-admin-init.php' );
+
         include( 'classes/class-shipper.php' );     //contains shipping class skeleton
         include( 'classes/class-container.php' );   //contains container class
         include( 'classes/class-package.php' );     //contains package class
         include( 'classes/class-xmlparser.php' );   //contains xmlparser class
         include( 'product-meta.php' );              //contains extra product meta processors
+
     }
 
-    function additional_product_meta(){
+    function additional_product_meta() {
 
         add_action( 'woocommerce_product_options_dimensions', 'woocommerce_product_girth', 10 );
         add_action( 'woocommerce_product_options_dimensions', 'woocommerce_product_lettermail', 10 );
