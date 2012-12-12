@@ -127,6 +127,7 @@ class HypnoticShipper extends WC_Shipping_Method {
 
         $this->custombox_form_fields();
         $this->rename_method_form_fields();
+        $this->load_category();
 
         add_action( 'admin_notices', array(&$this, 'notification') );
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array(&$this, 'process_admin_options'), 1);
@@ -327,6 +328,13 @@ class HypnoticShipper extends WC_Shipping_Method {
                 'description' => __('Instead of applying handling fee to shipping rate, apply it to the value of cart.', 'hypnoticzoo'),
                 'default' => 'no'
             ),
+            'class_ship_only' => array(
+                'title' => __('Use shipping class', 'hypnoticzoo'),
+                'label' => __('Ship only ' . $this->carrier . ' shipping class enabled products', 'hypnoticzoo'),
+                'type' => 'checkbox',
+                'description' => __('By checking this option, only products with ' . $this->carrier . ' selected as <a target=blank href="http://wcdocs.woothemes.com/user-guide/product-shipping-classes/">Shipping Class</a> will be calculated.', 'hypnoticzoo'),
+                'default' => 'no'
+            ),
             'ship_type' => array(
                 'title' => __('Your products will be shipped', 'hypnoticzoo'),
                 'type' => 'select',
@@ -500,7 +508,24 @@ class HypnoticShipper extends WC_Shipping_Method {
     * Prepare packages, split or not
     */
     public function prepare_packages(){
+        global $woocommerce;
+        $products = array();
+        $cart_products = $woocommerce->cart->get_cart();
 
+        if ( $this->class_ship_only == 'yes' ) {
+
+            foreach ( $cart_products as $product ) {
+                $item = $product['data'];
+                if ( $item->get_shipping_class() == $this->category->slug ) {
+                    $products[] = $product;
+                }
+            }
+
+            return $products;
+
+        }
+
+        return $cart_products;
     }
 
     /**
@@ -850,11 +875,20 @@ class HypnoticShipper extends WC_Shipping_Method {
         }
     }
 
+    public function load_category() {
+        if ( $term = term_exists( $this->carrier, 'product_shipping_class' ) ) {
+            $term_id = current( $term );
+            return $this->category = get_term( $term_id, 'product_shipping_class' );
+        }
+
+        return false;
+    }
+
     /**
     * install carrier class if one doesn't exist
     * This function is triggered by woocommerce_register_post_type hook
     */
-    public function install_category(){
+    public function install_category() {
         if ( !term_exists( $this->carrier, 'product_shipping_class' ) ) {
             wp_insert_term(
                 $this->carrier, // the term 
