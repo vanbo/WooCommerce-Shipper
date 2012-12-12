@@ -48,6 +48,8 @@ class HipperShipper {
     function includes() {
         if ( is_admin() ) include( 'admin/hypnoticzoo-admin-init.php' );
 
+        include( 'classes/class-product.php' );     //contains shipping class skeleton
+        include( 'classes/class-product-variation.php' );   //contains container class
         include( 'classes/class-shipper.php' );     //contains shipping class skeleton
         include( 'classes/class-container.php' );   //contains container class
         include( 'classes/class-package.php' );     //contains package class

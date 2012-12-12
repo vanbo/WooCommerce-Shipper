@@ -191,7 +191,7 @@ class HypnoticShipper extends WC_Shipping_Method {
         $available_boxes = array('0' => 'Add a new box');
         foreach( $this->available_boxes as $key => $box ){
             if ( $box['box_label'] ) {
-                $available_boxes[$key] = $box['box_label'];
+                $available_boxes[$key] = $box['box_label'] . ': ' .$box['box_width'] . ' x ' . $box['box_length'] . ' x ' . $box['box_height'] . ' in ' . strtoupper($this->dimension_unit);;
             } else {
                 $available_boxes[$key] = $box['box_width'] . ' x ' . $box['box_length'] . ' x ' . $box['box_height'] . ' in ' . strtoupper($this->dimension_unit);
             }
@@ -505,12 +505,23 @@ class HypnoticShipper extends WC_Shipping_Method {
     }
 
     /**
-    * Prepare packages, split or not
+    * Prepare packages, split or not, also load additional fields by convert to different classes
     */
     public function prepare_packages(){
         global $woocommerce;
         $products = array();
-        $cart_products = $woocommerce->cart->get_cart();
+        $cart_products = array();
+
+        foreach ( $woocommerce->cart->get_cart() as $product ) {
+            $item = $product['data'];
+
+            if ( $item->product_type == 'variable' ) {
+                $product['data'] = new HypnoticProductVariation( $item->variation_id );
+            } else {
+                $product['data'] = new HypnoticProduct( $item->id );
+            }
+            $cart_products[] = $product;
+        }
 
         if ( $this->class_ship_only == 'yes' ) {
 
@@ -526,6 +537,19 @@ class HypnoticShipper extends WC_Shipping_Method {
         }
 
         return $cart_products;
+    }
+
+    /**
+    * Check if letter mail is available for this cart
+    */
+    public function letter_mail_available( $products ) {
+        foreach ( $products as $product ) {
+            $item = $product['data'];
+            if ( $item->letter_mail == 'no' )
+                return false;
+        }
+
+        return true;
     }
 
     /**
