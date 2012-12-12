@@ -540,6 +540,19 @@ class HypnoticShipper extends WC_Shipping_Method {
     }
 
     /**
+    * Check if letter mail is available for this cart
+    */
+    public function letter_mail_available( $products ) {
+        foreach ( $products as $product ) {
+            $item = $product['data'];
+            if ( $item->letter_mail == 'no' )
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
     * Get a box from it's id
     */
     public function get_box( $id ) {
