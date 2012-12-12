@@ -505,12 +505,23 @@ class HypnoticShipper extends WC_Shipping_Method {
     }
 
     /**
-    * Prepare packages, split or not
+    * Prepare packages, split or not, also load additional fields by convert to different classes
     */
     public function prepare_packages(){
         global $woocommerce;
         $products = array();
-        $cart_products = $woocommerce->cart->get_cart();
+        $cart_products = array();
+
+        foreach ( $woocommerce->cart->get_cart() as $product ) {
+            $item = $product['data'];
+
+            if ( $item->product_type == 'variable' ) {
+                $product['data'] = new HypnoticProductVariation( $item->variation_id );
+            } else {
+                $product['data'] = new HypnoticProduct( $item->id );
+            }
+            $cart_products[] = $product;
+        }
 
         if ( $this->class_ship_only == 'yes' ) {
 
