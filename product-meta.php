@@ -60,19 +60,19 @@ function woocommerce_product_lettermail() {
     global $post, $thepostid, $woocommerce;
     $thepostid = $post->ID;
 
-    $send_by_mail = (get_post_meta( $thepostid, '_lettermail', true ) == "yes") ? 'true' : 'false';
+    $send_by_mail = (get_post_meta( $thepostid, '_letter_mail', true ) == "yes") ? true : false;
 
     if ( get_option( 'woocommerce_enable_dimensions', true ) !== 'no' ) {
 ?>
         <p class="form-field dimensions_field">
-            <label for="product_lettermail"><?php echo __( 'Send as Letter', 'woocommerce' ); ?></label>
-            <input id="product_lettermail" class="input-text sized" type="checkbox" name="_lettermail" <?php if( $send_by_mail ): ?> checked <?php endif; ?> />
-            <span class="description"><?php _e( 'Ship this product as letter instead of in box.', 'woocommerce' ); ?></span>
+            <label for="product_letter_mail"><?php echo __( 'Send as Letter', 'woocommerce' ); ?></label>
+            <input id="product_letter_mail" class="input-text sized" type="checkbox" name="_letter_mail" <?php if( $send_by_mail ): ?> checked <?php endif; ?> />
+            <span class="description"><?php _e( 'Ship this product in an envelope instead of in a box.', 'woocommerce' ); ?></span>
         </p>
         <?php
         
     } else {
-        echo '<input type="hidden" name="_lettermail" value="' . $send_by_mail == 'true' . '" />';
+        echo '<input type="hidden" name="_letter_mail" value="' . $send_by_mail == 'true' . '" />';
     }
 }
 
@@ -87,14 +87,14 @@ function woocommerce_product_lettermail() {
 
 function woocommerce_process_product_lettermail_metabox( $post_id ) {
 
-    add_post_meta( $post_id, '_lettermail', '0', true );
+    add_post_meta( $post_id, '_letter_mail', '0', true );
 
     $is_virtual = ( isset( $_POST['_virtual'] ) ) ? 'yes' : 'no';
 
-    if ( isset( $_POST['_lettermail'] ) and $_POST['_lettermail'] ) {
-        update_post_meta( $post_id, '_lettermail', stripslashes( 'yes' ));
+    if ( isset( $_POST['_letter_mail'] ) and $_POST['_letter_mail'] ) {
+        update_post_meta( $post_id, '_letter_mail', stripslashes( 'yes' ));
     } else {
-        update_post_meta( $post_id, '_lettermail', stripslashes( 'no' ));
+        update_post_meta( $post_id, '_letter_mail', stripslashes( 'no' ));
     }
 }
 ?>

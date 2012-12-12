@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * HypnoticShipper
  *
  * The HypnoticShipper class is skeleton class to be inherented by actual shipping extension.
@@ -127,9 +127,10 @@ class HypnoticShipper extends WC_Shipping_Method {
 
         $this->custombox_form_fields();
         $this->rename_method_form_fields();
+        $this->load_category();
 
-        add_action('admin_notices', array(&$this, 'notification'));
-        add_action('woocommerce_update_options_shipping_' . $this->id, array(&$this, 'process_admin_options'), 1);
+        add_action( 'admin_notices', array(&$this, 'notification') );
+        add_action( 'woocommerce_update_options_shipping_' . $this->id, array(&$this, 'process_admin_options'), 1);
 
     }
 
@@ -169,6 +170,7 @@ class HypnoticShipper extends WC_Shipping_Method {
                 'title' => __('Pick a method to rename', 'hypnoticzoo'),
                 'type' => 'select',
                 'class' => 'chosen_select',
+                'description' => __('Rename one of the ' . $this->carrier . ' shipping methods to suit your shop.', 'hypnoticzoo'),
                 'css' => 'width: 25em;',
                 'options' => array_merge(array('0' => ''), $this->shipping_methods)
             ),
@@ -189,7 +191,7 @@ class HypnoticShipper extends WC_Shipping_Method {
         $available_boxes = array('0' => 'Add a new box');
         foreach( $this->available_boxes as $key => $box ){
             if ( $box['box_label'] ) {
-                $available_boxes[$key] = $box['box_label'];
+                $available_boxes[$key] = $box['box_label'] . ': ' .$box['box_width'] . ' x ' . $box['box_length'] . ' x ' . $box['box_height'] . ' in ' . strtoupper($this->dimension_unit);;
             } else {
                 $available_boxes[$key] = $box['box_width'] . ' x ' . $box['box_length'] . ' x ' . $box['box_height'] . ' in ' . strtoupper($this->dimension_unit);
             }
@@ -326,6 +328,13 @@ class HypnoticShipper extends WC_Shipping_Method {
                 'description' => __('Instead of applying handling fee to shipping rate, apply it to the value of cart.', 'hypnoticzoo'),
                 'default' => 'no'
             ),
+            'class_ship_only' => array(
+                'title' => __('Use shipping class', 'hypnoticzoo'),
+                'label' => __('Ship only ' . $this->carrier . ' shipping class enabled products', 'hypnoticzoo'),
+                'type' => 'checkbox',
+                'description' => __('By checking this option, only products with ' . $this->carrier . ' selected as <a target=blank href="http://wcdocs.woothemes.com/user-guide/product-shipping-classes/">Shipping Class</a> will be calculated.', 'hypnoticzoo'),
+                'default' => 'no'
+            ),
             'ship_type' => array(
                 'title' => __('Your products will be shipped', 'hypnoticzoo'),
                 'type' => 'select',
@@ -342,7 +351,7 @@ class HypnoticShipper extends WC_Shipping_Method {
                 'type' => 'multiselect',
                 'class' => 'chosen_select',
                 'css' => 'width: 25em;',
-                'description' => 'Select boxes you want use when packing your products',
+                'description' => 'Select boxes you want use when packing your products. <br />For information about some predefined boxes, See <a target="blank" href="http://auspost.com.au/personal/packaging-materials.html">here</a>',
                 'default' => array(),
                 'options' => $usable_boxes
             ),
@@ -496,10 +505,51 @@ class HypnoticShipper extends WC_Shipping_Method {
     }
 
     /**
-    * Prepare packages, split or not
+    * Prepare packages, split or not, also load additional fields by convert to different classes
     */
     public function prepare_packages(){
+        global $woocommerce;
+        $products = array();
+        $cart_products = array();
 
+        foreach ( $woocommerce->cart->get_cart() as $product ) {
+            $item = $product['data'];
+
+            if ( $item->product_type == 'variable' ) {
+                $product['data'] = new HypnoticProductVariation( $item->variation_id );
+            } else {
+                $product['data'] = new HypnoticProduct( $item->id );
+            }
+            $cart_products[] = $product;
+        }
+
+        if ( $this->class_ship_only == 'yes' ) {
+
+            foreach ( $cart_products as $product ) {
+                $item = $product['data'];
+                if ( $item->get_shipping_class() == $this->category->slug ) {
+                    $products[] = $product;
+                }
+            }
+
+            return $products;
+
+        }
+
+        return $cart_products;
+    }
+
+    /**
+    * Check if letter mail is available for this cart
+    */
+    public function letter_mail_available( $products ) {
+        foreach ( $products as $product ) {
+            $item = $product['data'];
+            if ( $item->letter_mail == 'no' )
+                return false;
+        }
+
+        return true;
     }
 
     /**
@@ -791,6 +841,35 @@ class HypnoticShipper extends WC_Shipping_Method {
             </table>
         </div>
         <div class="clear"></div>
+
+
+        <?php $js_data = apply_filters('hypnoticzoo_shipping_assets', $this->id); ?>
+        <script type="text/javascript">
+            jQuery(window).load(function(){
+                var $method_id = '<?php echo $this->id; ?>';
+                <?php 
+                    foreach ( $js_data as $param => $data )
+                        echo 'var $' . $param . ' = ' . $data . ';';
+                ?>
+
+                jQuery('select#woocommerce_' + $method_id + '_saved_boxes').change(function(){
+                    box = $available_boxes[jQuery(this).val()];
+                    for (var key in box) {
+                        if (box.hasOwnProperty(key)) {
+
+                            jQuery('#woocommerce_' + $method_id + '_' + key).val(box[key]);
+
+                        }
+                    }
+                });
+
+                jQuery('select#woocommerce_' + $method_id + '_shipping_method').change(function(){
+                    method = $renamed_methods[jQuery(this).val()];
+                    jQuery('#woocommerce_' + $method_id + '_new_name').val(method);
+                });
+
+            });
+        </script>
         <?php
     }
 
@@ -818,6 +897,34 @@ class HypnoticShipper extends WC_Shipping_Method {
                 $woocommerce->clear_messages();
                 $woocommerce->add_message('<p>'. $this->carrier .' Response:</p><ul><li>' . implode('</li><li>', $response) . '</li></ul>');
         }
+    }
+
+    public function load_category() {
+        if ( $term = term_exists( $this->carrier, 'product_shipping_class' ) ) {
+            $term_id = current( $term );
+            return $this->category = get_term( $term_id, 'product_shipping_class' );
+        }
+
+        return false;
+    }
+
+    /**
+    * install carrier class if one doesn't exist
+    * This function is triggered by woocommerce_register_post_type hook
+    */
+    public function install_category() {
+        if ( !term_exists( $this->carrier, 'product_shipping_class' ) ) {
+            wp_insert_term(
+                $this->carrier, // the term 
+                'product_shipping_class', // the taxonomy
+                array(
+                    'description'=> $this->description,
+                    'slug' => trim($this->carrier)
+                )
+            );
+            return true;
+        }
+        return false;
     }
 
     /**

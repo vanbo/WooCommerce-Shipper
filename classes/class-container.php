@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * HypnoticContainer
  *
  * HypnoticPackage represent a shipping box that contains items
