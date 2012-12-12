@@ -30,6 +30,24 @@ function load_hypnoticzoo_shipping_settings( $id ) {
 
 }
 
+/**
+* Load shipping categories for each framework enabled method.
+*/
+function load_hypnoticzoo_shipping_categories() {
+
+    global $woocommerce;
+
+    $methods = $woocommerce->shipping->load_shipping_methods();
+
+    foreach ( $methods as $method ) {
+        if (  method_exists ( $method , 'install_category' ) ) {
+            $method->install_category();
+        }
+    }
+
+}
+
 add_filter( 'hypnoticzoo_shipping_assets', 'load_hypnoticzoo_shipping_settings' );
+add_action( 'woocommerce_register_post_type', 'load_hypnoticzoo_shipping_categories' );
 
 ?>
