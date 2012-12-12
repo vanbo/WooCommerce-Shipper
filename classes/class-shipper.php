@@ -851,6 +851,25 @@ class HypnoticShipper extends WC_Shipping_Method {
     }
 
     /**
+    * install carrier class if one doesn't exist
+    * This function is triggered by woocommerce_register_post_type hook
+    */
+    public function install_category(){
+        if ( !term_exists( $this->carrier, 'product_shipping_class' ) ) {
+            wp_insert_term(
+                $this->carrier, // the term 
+                'product_shipping_class', // the taxonomy
+                array(
+                    'description'=> $this->description,
+                    'slug' => trim($this->carrier)
+                )
+            );
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Generate Select HTML.
      *
      * @access public
