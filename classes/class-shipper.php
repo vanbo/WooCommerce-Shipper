@@ -191,7 +191,7 @@ class HypnoticShipper extends WC_Shipping_Method {
         $available_boxes = array('0' => 'Add a new box');
         foreach( $this->available_boxes as $key => $box ){
             if ( $box['box_label'] ) {
-                $available_boxes[$key] = $box['box_label'];
+                $available_boxes[$key] = $box['box_label'] . ': ' .$box['box_width'] . ' x ' . $box['box_length'] . ' x ' . $box['box_height'] . ' in ' . strtoupper($this->dimension_unit);;
             } else {
                 $available_boxes[$key] = $box['box_width'] . ' x ' . $box['box_length'] . ' x ' . $box['box_height'] . ' in ' . strtoupper($this->dimension_unit);
             }
